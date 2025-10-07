@@ -51,32 +51,13 @@ const Navbar = ({ isOpen, setIsOpen }) => {
             <p> High Festive Demand: Dispatch may take 2-3 extra days </p>
           </div>
         )}
-        {/* <div
-          className={`flex justify-center items-center gap-4 bg-white ${
-            sticky ? "hidden" : "block"
-          }`}
-        >
-          <span>
-            {" "}
-            <FaChevronLeft />{" "}
-          </span>
-          <p>Limited Edition Christmas Gift Box is now available!</p>
-          <p>Delivering Fragrances to pan India</p>
-          <span>
-            {" "}
-            <FaChevronRight />{" "}
-          </span>
-        </div> */}
 
         <div
           className={`"h-32 bg-gray-200 flex items-center relative"
           ${sticky ? "h-16 bg-white shadow-md" : "h-32 bg-gray-200"}`}
         >
-          <button
-            className=" block fixed top-8 right-12 z-91 lap:hidden"
-            onClick={handelOpen}
-            aria-label="Toggle navigation menu"
-          >
+          <button className=" block fixed top-8 right-12 z-91 lap:hidden"
+            onClick={handelOpen} aria-label="Toggle navigation menu">
             <div className="space-y-1">
               <svg
                 width="50"
@@ -104,16 +85,13 @@ const Navbar = ({ isOpen, setIsOpen }) => {
             </div>
           </button>
 
-          <div className="lap:w-1/5 flex justify-center items-center bg-red-300">
-            <Link to="/" onClick={goTop}>
-              {" "}
-              <h5>JUST HERBS</h5>{" "}
-            </Link>
+          <div className="lap:w-1/5 lap:h-24 flex justify-center items-center">
+            <Link to="/" onClick={goTop}> <h5 className='text-2xl font-semibold'>JUST HERBS</h5> </Link>
           </div>
 
           <nav
             className={`bg-white w-full h-screen fixed top-0 flex flex-row justify-center z-90 transition-transform duration-300 ease-in-out  
-        tab:flex tab:flex-row tab:justify-center tab:w-full tab:fixed lap:bg-purple-300 lap:relative lap:left-0 lap:w-3/5 lap:h-12 lap:translate-x-0 
+        tab:flex tab:flex-row tab:justify-center tab:w-full tab:fixed lap:bg-transparent lap:relative lap:left-0 lap:w-3/5 lap:h-12 lap:translate-x-0 
           ${resnav ? "" : "-translate-x-full"}`}
           >
             <ul className="flex flex-col lap:flex-row justify-center items-center gap-9 font-semibold list-none text-black">
@@ -204,146 +182,31 @@ const Navbar = ({ isOpen, setIsOpen }) => {
             </ul>
           </nav>
 
-          <div className="lap:w-1/5 flex items-center gap-6 bg-amber-200">
-            {/* <div className="relative group">
-              <button className="w-9 h-9 rounded-full flex items-center justify-center bg-white text-xl">
-                {user ? user.Firstname?.charAt(0) : <FaRegUser />}
-              </button>
-              <div
-                className="absolute before:content-[''] before:border-b-[17px] before:border-solid before:border-b-white before:border-r-[10px] 
-                before:border-r-transparent before:border-l-[10px] before:border-l-transparent before:absolute before:-top-4 before:left-12 
-                w-36 h-auto bg-white z-91 -right-10 top-10 rounded-lg py-1 hidden group-hover:block shadow-lg"
-              >
-                {user ? (
-                  <>
-                    <Link
-                      to="/profile"
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      {" "}
-                      Profile{" "}
-                    </Link>
-                    <Link
-                      to="/resetpassword"
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      Reset Password{" "}
-                    </Link>
-                    <button
-                      onClick={() => dispatch(logout())}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                    >
-                      {" "}
-                      Logout{" "}
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      to="/login"
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      {" "}
-                      Login{" "}
-                    </Link>
-                    <Link
-                      to="/signup"
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      {" "}
-                      Signup{" "}
-                    </Link>
-                  </>
-                )}
-              </div>
-            </div> */}
-
+          <div className="lap:w-1/5 flex items-center justify-center gap-6">
+          
             <div className="w-9 h-9 font-medium text-4xl lap:text-2xl relative group">
-              <button aria-label="user-profile">
+              <button aria-label="user-profile" className="w-9 h-9 font-medium text-4xl lap:text-2xl">
                 {user ? user.Firstname?.charAt(0) : <FaRegUser />}
               </button>
               <div className=" before:content-[''] before:border-b-[17px] before:border-solid before:border-b-white before:border-r-[10px] before:border-r-transparent 
-              before:border-l-[10px] before:border-l-transparent before:absolute before:-top-4 before:left-12 w-auto h-auto bg-white absolute
-              z-91 -right-10 top-10 rounded-lg py-1 hidden group-hover:block shadow-lg"
+              before:border-l-[10px] before:border-l-transparent before:absolute before:-top-4 before:left-10 w-auto h-auto bg-white absolute
+              z-91 -right-6 top-10 rounded-lg py-1 hidden group-hover:block shadow-lg"
               >
-                {" "}
-                {user ? (
-                  <>
-                    <Link
-                      to="/profile"
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      {" "}
-                      Profile{" "}
-                    </Link>
-                    <Link
-                      to="/resetpassword"
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      Reset Password{" "}
-                    </Link>
-                    <button
-                      onClick={() => dispatch(logout())}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                    >
-                      {" "}
-                      Logout{" "}
-                    </button>
+                {user ?  <>
+                    <Link to="/profile" onClick={goTop} className="block px-4 py-2 hover:bg-gray-100" > Profile </Link>
+                    <Link to="/resetpassword" onClick={goTop} className="block px-4 py-2 hover:bg-gray-100" > Reset Password </Link>
+                    <button onClick={() => dispatch(logout())} className="w-full text-left px-4 py-2 hover:bg-gray-100" > Logout </button>
                   </>
-                ) : (
+                : 
                   <>
-                    <Link
-                      to="/login"
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      {" "}
-                      Login{" "}
-                    </Link>
-                    <Link
-                      to="/signup"
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      {" "}
-                      Signup{" "}
-                    </Link>
+                    <Link to="/login" onClick={goTop} className="block px-4 py-1 text-p font-mono hover:bg-gray-100"> Login </Link>
+                    <Link to="/signup" onClick={goTop} className="block px-4 py-1 text-p font-mono hover:bg-gray-100"> Signup </Link>
                   </>
-                )}
+                }
               </div>
-              {/* <div
-                className=" before:content-[''] before:border-b-[17px] before:border-solid before:border-b-white before:border-r-[10px] before:border-r-transparent 
-              before:border-l-[10px] before:border-l-transparent before:absolute before:-top-4 before:left-12 w-auto h-auto bg-white absolute
-              z-91 -right-10 top-10 rounded-lg py-1 hidden group-hover:block shadow-lg"
-              >
-                {user === null ? (
-                  <div className=" w-28 h-20 flex flex-col justify-center items-center">
-                    <button className=" cursor-pointer text-lg font-mono my-1 py-1 hover:text-blue-600 hover:bg-gray-200">
-                      <Link to="/login">Login</Link>
-                    </button>
-                    <button className=" cursor-pointer text-lg font-mono my-1 py-1 hover:text-blue-600 hover:bg-gray-200">
-                      <Link to="/signup">Signup</Link>
-                    </button>
-                  </div>
-                ) : (
-                  <div className=" w-36 h-28">
-                    <div className=" cursor-pointer text-base font-mono my-1 px-2 py-1 hover:bg-gray-100 hover:text-blue-600">
-                      <Link to="/profile">Profile</Link>{" "}
-                    </div>
-                    <div className=" cursor-pointer text-base font-mono my-1 px-2 py-1 hover:bg-gray-100 hover:text-blue-600">
-                      <Link to="/resetpassword">Reset Password</Link>{" "}
-                    </div>
-                    <div
-                      className=" cursor-pointer text-base font-mono my-1 px-2 py-1 hover:bg-gray-100 hover:text-blue-600"
-                      onClick={() => dispatch(logout())}
-                    >
-                      {" "}
-                      LogOut{" "}
-                    </div>
-                  </div>
-                )}
-              </div> */}
             </div>
 
-            <button className="w-9 h-9 font-medium text-4xl lap:text-2xl">
+            <button className="w-9 h-9 font-medium text-4xl lap:text-2xl" aria-label="search-button">
               <TbSearch />
             </button>
 
@@ -352,9 +215,13 @@ const Navbar = ({ isOpen, setIsOpen }) => {
               onClick={() => setIsOpen(!isOpen)}
             >
               <TbShoppingCart />
-              <span className="w-6 h-6 absolute -right-4 -top-3 text-base text-center font-medium bg-red-600 text-white rounded-full">
+              { 5 > 0 ?
+              <span className="w-6 h-6 absolute right-0 -top-1 text-base text-center font-medium bg-yellow-50 rounded-full">
                 0 {/* {user.result.cartItems.length} */}
               </span>
+            :
+              <span className="w-6 h-6 absolute right-0 -top-1 text-base text-center font-medium rounded-full"></span>
+                }
             </button>
           </div>
         </div>

@@ -8,19 +8,19 @@ import { BrowserRouter as Router } from "react-router";
 import Header from "./components/Header";
 import AllRoutes from "./AllRoutes";
 import Footer from "./components/footer/Footer";
-// import Cart from "./components/cart/Cart";
+import Cart from "./components/cart/Cart";
 function App() {
   const [isOpen, setIsOpen] = useState();
 
-  // const isClose = () => {
-  //   setIsOpen(!isOpen);
-  // };
+  const isClose = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <SkeletonTheme baseColor="#76b5c5">
       <Router>
         <Header isOpen={isOpen} setIsOpen={setIsOpen} />
-        {/* <Cart isClose={isClose} isOpen={isOpen} /> */}
+        <Cart isClose={isClose} isOpen={isOpen} />
         <div className=" relative top-[12.5rem]">
         <AllRoutes />
         <Footer />

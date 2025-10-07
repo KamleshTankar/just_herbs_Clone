@@ -21,7 +21,10 @@ const Signup = () => {
   
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handlechange = () => navigate("/login");
+  const handlechange = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+      navigate("/login");
+  };
 
   const handleChanged = (e) => {
     const {name, value} = e.target;
@@ -252,7 +255,7 @@ const Signup = () => {
             <TextField placeholder="Enter Password" sx={{ mb: 2 }} type={showPassword ? "text" : "password"}
               slotProps={{
                 input: { endAdornment: (
-                    <InputAdornment position="end"> <IconButton onClick={()=>setShowPassword((prev)=>!prev)}>
+                    <InputAdornment position="end"> <IconButton aria-label='password-showhide-button' onClick={()=>setShowPassword((prev)=>!prev)}>
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton> </InputAdornment> ), },
               }} label="Enter Password" variant="outlined" error={!!errors.password} helperText={errors.password}
@@ -261,7 +264,7 @@ const Signup = () => {
             <TextField placeholder="Confirm Password" sx={{ mb: 2 }} type={showConfirm ? "text" : "password"}
               slotProps={{
                 input: { endAdornment: (
-                    <InputAdornment position="end"> <IconButton onClick={()=>setShowConfirm((prev)=>!prev)}>
+                    <InputAdornment position="end"> <IconButton aria-label='confirmpassword-showhide-button' onClick={()=>setShowConfirm((prev)=>!prev)}>
                         {showConfirm ? <VisibilityOff /> : <Visibility />}
                       </IconButton> </InputAdornment> ), },
               }} label="Confirm Password" variant="outlined" error={!!errors.confirmPassword} helperText={errors.confirmPassword}
@@ -271,7 +274,7 @@ const Signup = () => {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember Me"
             /> */}
-            <Button type="submit" sx={{width:300, marginX:"auto"}} variant="contained" className="w-full">
+            <Button type="submit" sx={{width:300, marginX:"auto"}} aria-label='signup-button' variant="contained" className="w-full">
               Sign Up
             </Button>
           </Box>
