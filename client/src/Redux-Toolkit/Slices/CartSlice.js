@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API_URL from "../Api/Api";
 
-
 export const AddToCart = createAsyncThunk("AddToCart", async (Item, Id) => {
 try {
     const response = await API_URL.post(`/user/addcart/${Id}`, Item);
