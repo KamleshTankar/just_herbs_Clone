@@ -103,7 +103,7 @@ module.exports = {
         cona: "auto auto",
         box: "350px 350px",
         box2: "260px 260px 260px",
-        box3: "200px 200px 200px 200px",
+        box3: "290px 290px 290px 290px",
       },
       gridTemplateRows: {
         inp: "27fr 21fr 21fr 21fr",

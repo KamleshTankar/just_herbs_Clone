@@ -11,12 +11,11 @@ const LimitedEdition = () => {
     try {
       const response = await fetch("https://dummyjson.com/products");
       const data = await response.json();
-      // console.log(data.product);
       setProducts(data.products);
-      setLoading(false);
     } catch (error) {
-      // console.log(error);
-      setLoading(true);
+      console.error("Failed to fetch products:", error);
+    } finally {
+      setLoading(false);
     }
   };
 

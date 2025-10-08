@@ -16,8 +16,7 @@ const Products = ({ Prod, i }) => {
   };
   return (
     <>
-      <div
-        key={i}
+      <div key={i}
         className="w-full h-auto py-4 Lp-l:mx-0 flex flex-col justify-center items-center border-2 hover:border-black rounded-md"
       >
         <img src={Prod.thumbnail} alt={Prod.title}
