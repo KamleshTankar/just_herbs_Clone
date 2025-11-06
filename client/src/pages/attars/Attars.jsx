@@ -9,6 +9,8 @@ import FilterSide from "../../components/filterside/FilterSide";
 import Sidemenu from "../../components/aside/Sidemenu";
 import Products from "../../components/products/Products";
 
+import BgBanner from "../../assets/banner/banner3.jpg"
+
 import { getallproduct } from "../../Redux-Toolkit/Slices/ProductSlice";
 
 const Attars = () => {
@@ -63,8 +65,8 @@ const Attars = () => {
 
   return (
     <>
-      {/* <Banner imageUrl={imageUrl} title={"Perfums"} /> */}
-      <Banner title={"Attars"} />
+      <Banner imageUrl={BgBanner} title={"Attars"} />
+  
       <FilterSide GridSelect={GridHandler} Product={products} />
       <div className="w-[94%] mx-auto flex justify-between gap-4">
         <Sidemenu />

@@ -21,7 +21,7 @@ function App() {
       <Router>
         <Header isOpen={isOpen} setIsOpen={setIsOpen} />
         <Cart isClose={isClose} isOpen={isOpen} />
-        <div className=" relative top-[12.5rem]">
+        <div className="relative top-[10rem]">
         <AllRoutes />
         <Footer />
         </div>

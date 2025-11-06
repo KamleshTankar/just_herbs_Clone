@@ -22,7 +22,7 @@ const FilterSide = ({GridSelect, Product}) => {
     <>
       <aside
         className={`w-full h-12 z-20 flex items-center bg-white border-y border-black px-4 
-        ${sticky ? "fixed top-28" : "top-[26.7rem]"}`}
+        ${sticky ? "fixed top-[4rem]" : "top-[26.7rem]"}`}
       >
         <div className="w-[12%] h-6 flex justify-center items-center gap-2 ">
           <button

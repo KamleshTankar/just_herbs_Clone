@@ -9,6 +9,8 @@ import FilterSide from "../../components/filterside/FilterSide";
 import Sidemenu from "../../components/aside/Sidemenu";
 import Products from "../../components/products/Products";
 
+import BgImage from '../../assets/banner/banner1.jpg';
+
 import { getallproduct } from "../../Redux-Toolkit/Slices/ProductSlice";
 
 const AirFresheners = () => {
@@ -24,9 +26,11 @@ const AirFresheners = () => {
   // const { product } = useSelector((state) => state.ProductsList);
 
   const productsPerPage = 10;
+
   useEffect(() => {
     const FeatchProducts = async () => {
       try {
+        setLoading(true);
         const response = await fetch("https://dummyjson.com/products");
         const data = await response.json();
         setProducts(data.products || []);
@@ -36,6 +40,7 @@ const AirFresheners = () => {
         setLoading(false);
       }
     };
+
     FeatchProducts();
     dispatch(getallproduct());
   }, [dispatch]);
@@ -75,8 +80,8 @@ const AirFresheners = () => {
 
   return (
     <>
-      {/* <Banner imageUrl={imageUrl} title={"Perfums"} /> */}
-      <Banner title={"Air Fresheners"} />
+      <Banner imageUrl={BgImage} title={"Air Fresheners"} />
+      {/* <Banner title={"Air Fresheners"} /> */}
       <FilterSide GridSelect={(val)=>setGrids(val)} Product={filteredProducts} />
       <div className="w-[94%] mx-auto flex justify-between gap-4">
         <Sidemenu onAvailabilityChange={setAvailabilityFilter} onPriceChange={setPriceFilter} />
