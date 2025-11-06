@@ -5,14 +5,15 @@ import { TbChevronDown } from "react-icons/tb";
 const Sidemenu = ({ onAvailabilityChange, onPriceChange }) => {
   const [maxPrice, setMaxPrice] = useState(10000);
 
-
   const handlePriceChange = (value) => {
     setMaxPrice(value);
     onPriceChange(value);
   };
 
+
   return (
-    <aside className="w-[30%] px-4 pt-2 bg-orange-300">
+    <aside
+      className="w-[30%] px-4 pt-2 border-2 border-gray-300 ">
       <details className="border-b-2 border-gray-300" open>
         <summary className="h-10 px-2 flex justify-between items-center cursor-pointer">
           <span>MAIN MENU</span>

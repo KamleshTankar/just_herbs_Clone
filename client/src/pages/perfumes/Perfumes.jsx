@@ -9,7 +9,10 @@ import Sidemenu from "../../components/aside/Sidemenu";
 import FilterSide from "../../components/filterside/FilterSide";
 import Products from "../../components/products/Products";
 
+import BgBanner from "../../assets/banner/banner1.jpg";
+
 import { getallproduct } from "../../Redux-Toolkit/Slices/ProductSlice";
+import { useMemo } from "react";
 
 const Perfumes = () => {
   const [products, setProducts] = useState([]);
@@ -17,53 +20,51 @@ const Perfumes = () => {
   const [loading, setLoading] = useState(true);
   const [grids, setGrids] = useState("grid-cols-box gap-8");
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
     // const { product } = useSelector((state) => state.ProductsList);
   
   const productsPerPage = 10;
   
-  const FeatchProducts = async () => {
-    try {
-      const response = await fetch("https://dummyjson.com/products");
-      const data = await response.json();
-      setProducts(data.products || []);
-    } catch (error) {
-      console.log("Failed to fetch products:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const FeatchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("https://dummyjson.com/products");
+        const data = await response.json();
+        setProducts(data.products || []);
+      } catch (error) {
+        console.log("Failed to fetch products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     FeatchProducts();
     dispatch(getallproduct());
   }, [dispatch]);
 
+  const GridHandler = (selectgrid) => setGrids(selectgrid);
+
+  const totalPages = Math.ceil(products.length / productsPerPage);
+
+  const pagenatedProducts = useMemo(() => {
+    const start = (pages - 1) * productsPerPage;
+    const end = pages * productsPerPage;
+    return products.slice(start, end);
+  }, [pages, products]);
+  
+  
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
   const selectPageHandler = (selectedpage) => {
-    if (
-      selectedpage < 1 ||
-      selectedpage > Math.ceil(products.length / productsPerPage)
-    )
+    if ( selectedpage < 1 || selectedpage > totalPages)
       return;
     setPages(selectedpage);
   };
 
-  const GridHandler = (selectgrid) => {
-    setGrids(selectgrid);
-  };
-
-  const paginatedProducts = products.slice(
-    (pages - 1) * productsPerPage,
-    pages * productsPerPage
-  );
-
-  const totalPages = Math.ceil(products.length / productsPerPage);
-  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-
   return (
     <>
-      {/* <Banner imageUrl={imageUrl} title={"Perfums"} /> */}
-      <Banner title={"Perfums"} />
+      <Banner imageUrl={BgBanner} title={"Perfums"} />
       <FilterSide GridSelect={GridHandler} Product={products} />
       <div className="w-[94%] mx-auto flex justify-between gap-4">
         <Sidemenu />
@@ -82,7 +83,7 @@ const Perfumes = () => {
             </div>
           ) : (
             <div className={`w-full grid ${grids} justify-center`}>
-              {paginatedProducts.map((prod) => (
+              {pagenatedProducts.map((prod) => (
                 <Products Prod={prod} key={prod.id} />
               ))}
             </div>

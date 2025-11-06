@@ -52,11 +52,14 @@ const Navbar = ({ isOpen, setIsOpen }) => {
         )}
 
         <div
-          className={`"h-32 bg-gray-200 flex items-center relative"
-          ${sticky ? "h-16 bg-white shadow-md" : "h-32 bg-gray-200"}`}
+          className={`"h-32 flex items-center relative"
+          ${sticky ? "h-16 bg-gray-300 shadow-md" : "h-32 bg-gray-200"}`}
         >
-          <button className=" block fixed top-8 right-12 z-91 lap:hidden"
-            onClick={handelOpen} aria-label="Toggle navigation menu">
+          <button
+            className=" block fixed top-8 right-12 z-91 lap:hidden"
+            onClick={handelOpen}
+            aria-label="Toggle navigation menu"
+          >
             <div className="space-y-1">
               <svg
                 width="50"
@@ -85,7 +88,10 @@ const Navbar = ({ isOpen, setIsOpen }) => {
           </button>
 
           <div className="lap:w-1/5 lap:h-24 flex justify-center items-center">
-            <Link to="/" onClick={goTop}> <h5 className='text-2xl font-semibold'>JUST HERBS</h5> </Link>
+            <Link to="/" onClick={goTop}>
+              {" "}
+              <h5 className="text-2xl font-semibold">JUST HERBS</h5>{" "}
+            </Link>
           </div>
 
           <nav
@@ -182,30 +188,71 @@ const Navbar = ({ isOpen, setIsOpen }) => {
           </nav>
 
           <div className="lap:w-1/5 flex items-center justify-center gap-6">
-          
             <div className="w-9 h-9 font-medium text-4xl lap:text-2xl relative group">
-              <button aria-label="user-profile" className="w-9 h-9 font-medium text-4xl lap:text-2xl">
+              <button
+                aria-label="user-profile"
+                className="w-9 h-9 font-medium text-4xl lap:text-2xl"
+              >
                 {user ? user.Firstname?.charAt(0) : <FaRegUser />}
               </button>
-              <div className=" before:content-[''] before:border-b-[17px] before:border-solid before:border-b-white before:border-r-[10px] before:border-r-transparent 
+              <div
+                className=" before:content-[''] before:border-b-[17px] before:border-solid before:border-b-white before:border-r-[10px] before:border-r-transparent 
               before:border-l-[10px] before:border-l-transparent before:absolute before:-top-4 before:left-10 w-auto h-auto bg-white absolute
               z-91 -right-6 top-10 rounded-lg py-1 hidden group-hover:block shadow-lg"
               >
-                {user ?  <>
-                    <Link to="/profile" onClick={goTop} className="block px-4 py-2 hover:bg-gray-100" > Profile </Link>
-                    <Link to="/resetpassword" onClick={goTop} className="block px-4 py-2 hover:bg-gray-100" > Reset Password </Link>
-                    <button onClick={() => dispatch(logout())} className="w-full text-left px-4 py-2 hover:bg-gray-100" > Logout </button>
-                  </>
-                : 
+                {user ? (
                   <>
-                    <Link to="/login" onClick={goTop} className="block px-4 py-1 text-p font-mono hover:bg-gray-100"> Login </Link>
-                    <Link to="/signup" onClick={goTop} className="block px-4 py-1 text-p font-mono hover:bg-gray-100"> Signup </Link>
+                    <Link
+                      to="/profile"
+                      onClick={goTop}
+                      className="block px-4 py-2 hover:bg-gray-100"
+                    >
+                      {" "}
+                      Profile{" "}
+                    </Link>
+                    <Link
+                      to="/resetpassword"
+                      onClick={goTop}
+                      className="block px-4 py-2 hover:bg-gray-100"
+                    >
+                      {" "}
+                      Reset Password{" "}
+                    </Link>
+                    <button
+                      onClick={() => dispatch(logout())}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
+                      {" "}
+                      Logout{" "}
+                    </button>
                   </>
-                }
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      onClick={goTop}
+                      className="block px-4 py-1 text-p font-mono hover:bg-gray-100"
+                    >
+                      {" "}
+                      Login{" "}
+                    </Link>
+                    <Link
+                      to="/signup"
+                      onClick={goTop}
+                      className="block px-4 py-1 text-p font-mono hover:bg-gray-100"
+                    >
+                      {" "}
+                      Signup{" "}
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
 
-            <button className="w-9 h-9 font-medium text-4xl lap:text-2xl" aria-label="search-button">
+            <button
+              className="w-9 h-9 font-medium text-4xl lap:text-2xl"
+              aria-label="search-button"
+            >
               <TbSearch />
             </button>
 
@@ -214,13 +261,13 @@ const Navbar = ({ isOpen, setIsOpen }) => {
               onClick={() => setIsOpen(!isOpen)}
             >
               <TbShoppingCart />
-              { 5 > 0 ?
-              <span className="w-6 h-6 absolute right-0 -top-1 text-base text-center font-medium bg-yellow-50 rounded-full">
-                0 {/* {user.result.cartItems.length} */}
-              </span>
-            :
-              <span className="w-6 h-6 absolute right-0 -top-1 text-base text-center font-medium rounded-full"></span>
-                }
+              {5 > 0 ? (
+                <span className="w-6 h-6 absolute right-0 -top-1 text-base text-center font-medium bg-yellow-50 rounded-full">
+                  0 {/* {user.result.cartItems.length} */}
+                </span>
+              ) : (
+                <span className="w-6 h-6 absolute right-0 -top-1 text-base text-center font-medium rounded-full"></span>
+              )}
             </button>
           </div>
         </div>

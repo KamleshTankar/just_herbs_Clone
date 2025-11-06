@@ -8,6 +8,7 @@ import Banner from "../../components/banner/Banner";
 import FilterSide from "../../components/filterside/FilterSide";
 import Sidemenu from "../../components/aside/Sidemenu";
 import Products from "../../components/products/Products";
+import BgBanner from "../../assets/banner/banner2.jpg";
 
 import { getallproduct } from "../../Redux-Toolkit/Slices/ProductSlice";
 
@@ -63,8 +64,7 @@ const GiftHamper = () => {
 
   return (
     <>
-      {/* <Banner imageUrl={imageUrl} title={"Perfums"} /> */}
-      <Banner title={"Gift Hamper"} />
+      <Banner imageUrl={BgBanner} title={"Gift Hamper"} />
       <FilterSide GridSelect={GridHandler} Product={products} />
       <div className="w-[94%] mx-auto flex justify-between gap-4">
         <Sidemenu />
