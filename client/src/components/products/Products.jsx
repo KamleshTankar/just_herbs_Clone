@@ -16,19 +16,25 @@ const Products = ({ Prod, i }) => {
   };
   return (
     <>
-      <div key={i}
+      <div
+        key={i}
         className="w-full h-auto py-4 Lp-l:mx-0 flex flex-col justify-center items-center border-2 hover:border-black rounded-md"
       >
-        <img src={Prod.thumbnail} alt={Prod.title}
+        <img src={Prod.thumbnail || "/placeholder.jpg"} alt={Prod.title || "Product image"} loading="lazy"
           className=" h-[140px] w-[140px] my-2 mix-blend-multiply hover:scale-125 transition duration-300"
         />
-        <h4 className="w-full h-8 text-black my-1 text-xl text-center font-serif font-medium overflow-hidden">
-          {Prod.title}
-        </h4>
-        <span className="text-black my-1 text-bh2">Rating {Prod.rating}</span>
-        <span className="text-black my-1 text-bh2">$ {Prod.price}</span>
-        <span className="text-black my-1 text-bh2">Stock {Prod.stock}</span>
-        <button title="add-to-cart" aria-label="add-to-cart" onClick={handleAddToCart} className="w-[200px] Lp-l:w-[200px] text-4h font-semibold p-3 rounded-md bg-white border-2 border-black border-solid text-black hover:bg-blue-500 hover:text-white hover:border-blue-500">
+        <h1 className="w-full h-8 text-black my-1 text-xl text-center font-serif font-medium overflow-hidden">
+          {Prod.title || "Untitled Product"}
+        </h1>
+        <p className="text-gray-700 mt-1 text-sm">Rating: <span className="font-medium text-black">{Prod.rating || "N/A"}</span></p>
+        <p className="text-gray-700 mt-1 text-sm">Price: <span className="font-medium text-black">${Prod.price?.toFixed?.(2) ||"0.00"}</span></p>
+        <p className="text-gray-700 mt-1 text-sm">Stock: <span className="font-medium text-black">{Prod.stock ||0}</span></p>
+        <button
+          title="add-to-cart"
+          aria-label="add-to-cart"
+          onClick={handleAddToCart}
+          className="w-[200px] Lp-l:w-[200px] text-4h font-semibold p-3 rounded-md bg-white border-2 border-black border-solid text-black hover:bg-blue-500 hover:text-white hover:border-blue-500"
+        >
           Add to Cart
         </button>
       </div>

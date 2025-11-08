@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 // import { useSelector, useDispatch } from "react-redux";
 import Skeleton from "react-loading-skeleton";
@@ -61,27 +61,24 @@ const AirFresheners = () => {
     
   }, [products, availabilityFilter, priceFilter]);
 
-  const selectPageHandler = (selectedpage) => {
-    if (
-      selectedpage < 1 || selectedpage > totalPages ||
-      selectedpage > Math.ceil(products.length / productsPerPage)
-    )
-      return;
-    setPages(selectedpage);
-  };
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
-  const paginatedProducts = filteredProducts.slice(
-    (pages - 1) * productsPerPage,
-    pages * productsPerPage
-  );
-
+  const paginatedProducts = useMemo(() => {
+    const start = (pages - 1) * productsPerPage;
+    const end = pages * productsPerPage;
+    return filteredProducts.slice(start, end);
+  }, [pages, filteredProducts]);
+  
+  const selectPageHandler = (selectedpage) => {
+    if ( selectedpage < 1 || selectedpage > totalPages ) return;
+    setPages(selectedpage);
+  };
 
   return (
     <>
       <Banner imageUrl={BgImage} title={"Air Fresheners"} />
-      {/* <Banner title={"Air Fresheners"} /> */}
+      
       <FilterSide GridSelect={(val)=>setGrids(val)} Product={filteredProducts} />
       <div className="w-[94%] mx-auto flex justify-between gap-4">
         <Sidemenu onAvailabilityChange={setAvailabilityFilter} onPriceChange={setPriceFilter} />

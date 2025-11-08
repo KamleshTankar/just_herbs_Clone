@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Link } from "react-router";
 
@@ -6,28 +6,34 @@ import { Link } from "react-router";
 const LimitedEdition = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const FetchProducts = useCallback(async () => {
+    const controller = new AbortController();
+    try {
+      setLoading(true);
+      const response = await fetch("https://dummyjson.com/products");
+      if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
+      const data = await response.json();
+      setProducts(data.products);
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        setError("Unable to load the product. Please try again later.",error.message);
+        console.error("Failed to fetch products:", error);
+      }
+    } finally {
+      setLoading(false);
+    }
+    return () => controller.abort();
+  },[]);
 
   useEffect(() => {
-    const FeatchProducts = async () => {
-      try {
-        const response = await fetch("https://dummyjson.com/products");
-        const data = await response.json();
-        setProducts(data.products);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    FeatchProducts();
-  }, []);
+    FetchProducts();
+  }, [FetchProducts]);
 
   const LimitedProduct = products.filter((item) => item.id === 6);
 
-    const goTop = () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const goTop = () =>  window.scrollTo({ top: 0, behavior: "smooth" });
   
   const SkeletonLoading = () => {
     return (
@@ -49,34 +55,40 @@ const LimitedEdition = () => {
     );
   };
 
-   const ProductCard = ({ prod }) => {
-     return (
-       <article className="w-full flex flex-col justify-center lap:flex-row lap:justify-between px-12">
+  const ProductCard = React.memo(({ prod, goTop }) => {
+    const [quantity, setQuantity] = useState(1);
+    
+    const increaseQty = () => setQuantity((Qty) => Qty + 1);
+    const decreaseQty = () => setQuantity((Qty) => Math.max(Qty - 1, 1));
+
+    return (
+      <article className="w-full flex flex-col justify-center lap:flex-row lap:justify-between px-12">
          <div className="w-full lap:w-3/5 flex flex-col gap-4">
            <img
              src={prod.thumbnail}
              alt={prod.title}
+             loading="lazy"
              className="w-full lap:w-3/5"
            />
-           <div className="flex gap-4">
+           <div className="flex gap-3 flex-wrap">
              {prod.images.slice(1, 5).map((img, index) => (
                <img
                  key={index}
-                 src={img}
-                 alt={`product-${index}`}
-                 className="w-20 h-20"
+                 src={img} loading="lazy"
+                 alt={`${prod.title} variant ${index + 1}`}
+                 className="w-20 h-20 object-cover rounded-md border border-gray-300"
                />
              ))}
            </div>
          </div>
 
          <div className="w-full lap:w-2/5 space-y-4">
-           <div className="border-b border-solid border-gray-300">
-             <h2 onClick={goTop}>
+           <div className="border-b border-gray-300">
+             <h2 onClick={goTop} className="text-xl font-semibold hover:text-amber-700 transition-colors">
                <Link to="/perfumes">Chandan Perfume</Link>
              </h2>
-             <div className="flex justify-between">
-               <h3>Rs.1,450</h3>
+             <div className="flex justify-between items-center mt-1">
+               <h3 className="text-lg font-medium text-gray-800">Rs.1,450</h3>
                <div className="flex">
                  {[...Array(5)].map((_, i) => (
                    <svg
@@ -98,47 +110,51 @@ const LimitedEdition = () => {
            </div>
 
            <div className="flex gap-2 items-center">
-             <h5>Size :</h5>
-             <button className="border border-solid border-gray-400 rounded-sm px-2 py-1">
+             <h5 className=" font-medium">Size :</h5>
+             <button className="border border-gray-400 rounded-sm px-3 py-1 hover:bg-gray-100">
                50ml
              </button>
            </div>
 
-           <div className="flex items-center gap-2 border border-solid border-gray-300 px-2 py-1 w-fit">
-             <button>-</button>
+           <div className="flex items-center gap-2 border border-gray-300 px-2 py-1 w-fit rounded-md">
+             <button type="button" aria-label="minus Qty" onClick={decreaseQty} className="text-lg px-2 font-bold hover:text-amber-600">-</button>
              <input
                type="number"
                name="Qty"
-               defaultValue={0}
+               aria-label="quantity input"
+               Value={quantity}
+               onChange={(e)=>setQuantity(Math.max(1, parseInt(e.target.value)||1))}
                className="w-12 text-center"
              />
-             <button>+</button>
+             <button type="button" aria-label="plus Qty" onClick={increaseQty} className="text-lg px-2 font-bold hover:text-amber-600">+</button>
            </div>
 
-           <button className="bg-black text-white px-4 py-2 rounded">
+           <button type="button" aria-label="add to cart" className="bg-black text-white px-6 py-2 rounded-md hover:bg-amber-700 transition-colors">
              Add to Cart
            </button>
 
-           <div className="border-y border-solid border-gray-300 py-2">
-             <h4>Description</h4>
-             <p>{prod.description}</p>
+           <div className="border-y border-gray-300 py-3">
+             <h4 className="font-semibold text-gray-800">Description</h4>
+             <p className="text-sm text-gray-600">{prod.description}</p>
            </div>
          </div>
-       </article>
-     );
-   };
+      </article>
+    );
+  });
 
   return (
-    <section className=" border border-solid border-gray-300">
-      <div className="text-center py-4">
-        <h3>Fragrance of Authenticity!</h3>
-        {loading ? <Skeleton height={30} width={200} /> : <h1>Sandalwood</h1>}
+    <section className=" bg-white border border-solid border-gray-300">
+      <div className="text-center py-6">
+        <h3 className="text-sm uppercase tracking-widest text-gray-500">Fragrance of Authenticity!</h3>
+        {loading ? <Skeleton height={30} width={180} className="mx-auto mt-2" /> : <h1 className="text-3xl font-bold text-gray-900 mt-2">Sandalwood</h1>}
       </div>
 
+      {error && <p className="text-red-500 text-sm mb-6">{error}</p>}
+      
       {loading ? (
         <SkeletonLoading />
       ) : (
-        LimitedProduct.map((prod) => <ProductCard key={prod.id} prod={prod} />)
+        LimitedProduct.map((prod) => <ProductCard key={prod.id} prod={prod} goTop={goTop} />)
       )}
     </section>
   );
