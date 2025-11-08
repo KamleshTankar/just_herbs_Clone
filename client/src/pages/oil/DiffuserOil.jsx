@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 // import { useSelector, useDispatch } from "react-redux";
 import Skeleton from "react-loading-skeleton";
@@ -24,8 +24,10 @@ const DiffuserOil = () => {
 
   const productsPerPage = 10;
   
+  useEffect(() => {
     const FeatchProducts = async () => {
       try {
+        setLoading(true);
         const response = await fetch("https://dummyjson.com/products");
         const data = await response.json();
         setProducts(data.products || []);
@@ -34,33 +36,28 @@ const DiffuserOil = () => {
       } finally {
         setLoading(false);
       }
-  };
-  
-  useEffect(() => {
+    };
+    
     FeatchProducts();
     dispatch(getallproduct());
   }, [dispatch]);
   
-    const selectPageHandler = (selectedpage) => {
-      if (
-        selectedpage < 1 ||
-        selectedpage > Math.ceil(products.length / productsPerPage)
-      )
-        return;
-      setPages(selectedpage);
-    };
+  const GridHandler = (selectgrid) =>  setGrids(selectgrid);
   
-    const GridHandler = (selectgrid) => {
-      setGrids(selectgrid);
-    };
-  
-    const paginatedProducts = products.slice(
-    (pages - 1) * productsPerPage,
-    pages * productsPerPage
-  );
-
   const totalPages = Math.ceil(products.length / productsPerPage);
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+  
+  const paginatedProducts = useMemo(() => {
+    const start = (pages - 1) * productsPerPage;
+    const end = pages * productsPerPage;
+    return products.slice(start, end);
+  }, [pages, products]);
+
+  const selectPageHandler = (selectedpage) => {
+    if ( selectedpage < 1 || selectedpage > totalPages )
+      return;
+    setPages(selectedpage);
+  };
 
   return (
     <>
@@ -88,7 +85,7 @@ const DiffuserOil = () => {
                   <Products Prod={prod} key={prod.id} />
                 ))}
               </div>
-          )};
+          )}
 
           <div className="w-4/5 mx-auto flex justify-center gap-2 my-6">
             <button disabled={pages === 1} className="bg-gray-200 p-3 rounded disabled:opacity-50"

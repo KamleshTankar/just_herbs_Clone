@@ -46,15 +46,13 @@ const Perfumes = () => {
   const GridHandler = (selectgrid) => setGrids(selectgrid);
 
   const totalPages = Math.ceil(products.length / productsPerPage);
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   const pagenatedProducts = useMemo(() => {
     const start = (pages - 1) * productsPerPage;
     const end = pages * productsPerPage;
     return products.slice(start, end);
   }, [pages, products]);
-  
-  
-  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   const selectPageHandler = (selectedpage) => {
     if ( selectedpage < 1 || selectedpage > totalPages)
@@ -88,7 +86,7 @@ const Perfumes = () => {
               ))}
             </div>
           )}
-          ;
+
           <div className="w-4/5 mx-auto flex justify-center gap-2 my-6">
             <button
               disabled={pages === 1}
