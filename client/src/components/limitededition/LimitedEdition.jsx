@@ -12,6 +12,7 @@ const LimitedEdition = () => {
     const controller = new AbortController();
     try {
       setLoading(true);
+      setError(null);
       const response = await fetch("https://dummyjson.com/products");
       if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
       const data = await response.json();

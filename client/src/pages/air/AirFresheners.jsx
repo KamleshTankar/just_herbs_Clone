@@ -80,7 +80,7 @@ const AirFresheners = () => {
       <Banner imageUrl={BgImage} title={"Air Fresheners"} />
       
       <FilterSide GridSelect={(val)=>setGrids(val)} Product={filteredProducts} />
-      <div className="w-[94%] mx-auto flex justify-between gap-4">
+      <div className="w-full flex justify-between gap-4">
         <Sidemenu onAvailabilityChange={setAvailabilityFilter} onPriceChange={setPriceFilter} />
 
         <main className="w-[70%] mt-2">

@@ -73,9 +73,7 @@ const NewArrivals = () => {
 
   return (
     <section className="text-center py-10 px-4 bg-white">
-      <h3 className="text-lg font-medium text-gray-600 uppercase tracking-widest">
-        Collection
-      </h3>
+      <h3 className="text-lg font-medium text-gray-600 uppercase tracking-widest"> Collection </h3>
       <h1 className="text-3xl font-bold text-gray-900 mb-6">New Arrivals</h1>
 
       {error && <p className="text-red-500 text-sm mb-6">{error}</p>}
@@ -88,10 +86,8 @@ const NewArrivals = () => {
         )}
       </div>
 
-      <Link
-        to="/perfumes"
-        className="inline-block px-6 py-3 bg-gray-200 text-gray-800 font-medium rounded-full border border-transparent hover:bg-white hover:border-gray-400 transition-all duration-200"
-      >
+      <Link to="/perfumes"
+        className="inline-block px-6 py-3 bg-gray-200 text-gray-800 font-medium rounded-full border border-transparent hover:bg-white hover:border-gray-400 transition-all duration-200" >
         View All
       </Link>
     </section>
