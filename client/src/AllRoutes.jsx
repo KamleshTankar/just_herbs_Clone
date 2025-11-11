@@ -20,6 +20,7 @@ import Skin from './pages/skin/SkinCare'
 import Toners from './pages/skin/Toners'
 import Ubtan from './pages/skin/Ubtan'
 import Gift from "./pages/gift/GiftHamper"
+import SingleProduct from "./components/products/Singleproduct"
 
 const AllRoutes = () => {
   return (
@@ -48,7 +49,10 @@ const AllRoutes = () => {
     <Route exact path='toners' element={<Toners/> } />
     <Route exact path='ubtan' element={<Ubtan />} />
       
-    <Route exact path='gift' element={<Gift/>}/>
+    <Route exact path='gift' element={<Gift />} />
+      
+    <Route exact path='' element={<SingleProduct/>}/>
+    
     </Routes>
   )
 }

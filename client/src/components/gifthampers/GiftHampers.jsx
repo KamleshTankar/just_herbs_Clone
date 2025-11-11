@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Link } from "react-router";
 
@@ -7,25 +7,32 @@ import Products from "../../components/products/Products";
 const GiftHampers = () => {
 
   const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
     
-    const FeatchProducts = async () => {
+    const FetchProducts = useCallback( async () => {
       try {
+        setLoading(true);
+        setError(null);
         const response = await fetch("https://dummyjson.com/products");
+        if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
         const data = await response.json();
         setProducts(data.products);
-        setLoading(false);
       } catch (error) {
-        console.log(error);
-        setLoading(true);
+      if (error.name !== 'AbortError') {
+        console.log("Unable to load the product. Please try again later.", error.message);
+        setError(error.message);
       }
-    };
+      } finally {
+        setLoading(false);
+      }
+    },[]);
   
     const NewProduct = products.filter((item) => item.id <= 4);
   
       useEffect(() => {
-        FeatchProducts();
-      }, [products]);
+        FetchProducts();
+      }, [FetchProducts]);
     
       const SkeletonLoading = () => {
         return (
@@ -41,17 +48,22 @@ const GiftHampers = () => {
   };
   
   return (
-    <section className="text-center">
-      <h3>Collection</h3>
-      <h1>Perfume & Attar Gift Hampers</h1>
-      <div className="grid grid-cols-1 tab:grid-cols-2 lap:grid-cols-4 my-4">
+    <section className="text-center py-10 px-4 bg-white">
+      <h3 className="text-lg font-medium text-gray-600 uppercase tracking-widest">Collection</h3>
+      <h1 className="text-3xl font-bold text-gray-900 mb-6">Perfume & Attar Gift Hampers</h1>
+      
+      {error && <p className="text-red-500 text-sm mb-6">{error}</p>}
+
+      <div className="grid grid-cols-1 tab:grid-cols-2 lap:grid-cols-box3 lap:justify-center lap:gap-4 my-4">
         {NewProduct.map((prod) => {
           return loading ? <SkeletonLoading /> : <Products Prod={prod} />;
         })}
       </div>
-      <button className="p-4 bg-gray-200 hover:bg-white hover:border-2 border-gray-200">
-        <Link to="perfumes">View All</Link>
-      </button>
+
+      <Link to="/perfumes"
+        className="inline-block px-6 py-3 bg-gray-200 text-gray-800 font-medium rounded-full border border-transparent hover:bg-white hover:border-gray-400 transition-all duration-200" >
+        View All
+      </Link>
     </section>
   );
 };

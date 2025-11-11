@@ -71,7 +71,7 @@ const Sidemenu = ({ onAvailabilityChange=()=>{}, onPriceChange=()=>{} }) => {
 
      return ref;
    };
-
+  
    // Instances for each collapsible section
    const mainMenuRef = useAnimatedDetails();
    const availabilityRef = useAnimatedDetails();

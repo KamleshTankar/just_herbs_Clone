@@ -19,7 +19,6 @@ const Footer = () => {
     };
 
   return (
-    <>
       <footer className="lap:max-w-8lx mx-auto mt-16 py-4 grid grid-cols-com lap:grid-cols-inp tab:grid-cols-ft2t tab:text-left gap-32 justify-center text-center lap:text-left text-black">
         <div>
             <Link to="/" onClick={goTop} className=' inline-block mb-4 text-h5 text-center'>
@@ -87,7 +86,6 @@ const Footer = () => {
         </div>
 
       </footer>
-    </>
   );
 }
 
