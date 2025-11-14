@@ -1,24 +1,25 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import Skeleton from "react-loading-skeleton";
+// import Skeleton from "react-loading-skeleton";
 import { Link } from 'react-router-dom'
 
 import Products from "../../components/products/Products";
+import ProductsLoaders from '../Loaders/ProductLoaders';
 
-const SkeletonLoading = () => (
-  <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-    {[...Array(4)].map((_, index) => (
-      <div
-        key={index}
-        className="flex flex-col items-center p-3 bg-gray-50 rounded-md shadow-sm"
-      >
-        <Skeleton height={220} width={"100%"} />
-        <Skeleton height={20} width={"80%"} className="mt-2" />
-        <Skeleton height={20} width={"60%"} />
-        <Skeleton height={35} width={"50%"} className="mt-2" />
-      </div>
-    ))}
-  </div>
-);
+// const SkeletonLoading = () => (
+//   <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+//     {[...Array(4)].map((_, index) => (
+//       <div
+//         key={index}
+//         className="flex flex-col items-center p-3 bg-gray-50 rounded-md shadow-sm"
+//       >
+//         <Skeleton height={220} width={"100%"} />
+//         <Skeleton height={20} width={"80%"} className="mt-2" />
+//         <Skeleton height={20} width={"60%"} />
+//         <Skeleton height={35} width={"50%"} className="mt-2" />
+//       </div>
+//     ))}
+//   </div>
+// );
 
 
 const NewArrivals = () => {
@@ -54,7 +55,7 @@ const NewArrivals = () => {
       FetchProducts();
     }, [FetchProducts]);
   
-    const NewProduct = products.slice(0, 4);;
+  const NewProduct = products.slice(0, 4);
     
     // const SkeletonLoading = () => {
     //   return (
@@ -80,7 +81,7 @@ const NewArrivals = () => {
 
       <div className="grid grid-cols-1 tab:grid-cols-2 lap:grid-cols-box3 lap:justify-center lap:gap-4 my-4">
         {loading ? (
-          <SkeletonLoading />
+          <ProductsLoaders />
         ) : (
           NewProduct.map((prod) => <Products key={prod.id} Prod={prod} />)
         )}

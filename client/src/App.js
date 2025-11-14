@@ -17,13 +17,13 @@ function App() {
   };
 
   return (
-    <SkeletonTheme baseColor="#76b5c5">
+    <SkeletonTheme baseColor="#E8E5E5" highlightColor="#F5F5F5">
       <Router>
         <Header isOpen={isOpen} setIsOpen={setIsOpen} />
         <Cart isClose={isClose} isOpen={isOpen} />
         <div className="relative top-[10rem]">
-        <AllRoutes />
-        <Footer />
+          <AllRoutes />
+          <Footer />
         </div>
       </Router>
     </SkeletonTheme>

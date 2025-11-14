@@ -51,7 +51,7 @@ const AllRoutes = () => {
       
     <Route exact path='gift' element={<Gift />} />
       
-    <Route exact path='' element={<SingleProduct/>}/>
+    <Route exact path='collection/product/:name?variant=/:id' element={<SingleProduct/>}/>
     
     </Routes>
   )

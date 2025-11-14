@@ -10,6 +10,7 @@ import Featured from '../components/featured/Featured'
 import Hanpers from '../components/gifthampers/GiftHampers'
 import Suvarna from '../components/suvarnaseries/SuvarnaSeries'
 
+
 const Home = () => {
   return (
       <>
@@ -21,7 +22,7 @@ const Home = () => {
       <Range/>
       <Featured/>
       <Hanpers/>
-      <Suvarna/>
+      <Suvarna />
       </>
   )
 }
