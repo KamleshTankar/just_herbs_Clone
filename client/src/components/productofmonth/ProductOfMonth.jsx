@@ -38,7 +38,7 @@ const ProductOfMonth = () => {
     const goTop = () =>  window.scrollTo({ top: 0, behavior: "smooth", });
   
   return (
-    <section className=" bg-white border border-solid border-gray-300">
+    <section className=" bg-white py-4 border-y border-solid border-gray-300">
       <div className="text-center py-6">
         <h3 className=" text-sm uppercase tracking-widset text-gray-500">Product of Month</h3>
         {loading ? <Skeleton height={30} width={200} className="mx-auto mt-2"/> : <h1 className=" text-3xl font-bold text-gray-900 mt-2">Sandalwood</h1>}

@@ -31,10 +31,7 @@ const ProductCard = React.memo(({ prod, goTop }) => {
 
       <div className="w-full lap:w-2/5 space-y-4">
         <div className="border-b border-gray-300">
-          <h2
-            onClick={goTop}
-            className="text-xl font-semibold hover:text-amber-700 transition-colors"
-          >
+          <h2 onClick={goTop} className="text-xl font-semibold hover:text-amber-700 transition-colors" >
             <Link to="/perfumes">Chandan Perfume</Link>
           </h2>
           <div className="flex justify-between items-center mt-1">
@@ -60,7 +57,7 @@ const ProductCard = React.memo(({ prod, goTop }) => {
         </div>
 
         <div className="flex gap-2 items-center">
-          <h5 className=" font-medium">Size :</h5>
+          <h4 className=" font-medium">Size :</h4>
           <button className="border border-gray-400 rounded-sm px-3 py-1 hover:bg-gray-100">
             50ml
           </button>
@@ -79,7 +76,7 @@ const ProductCard = React.memo(({ prod, goTop }) => {
             type="number"
             name="Qty"
             aria-label="quantity input"
-            Value={quantity}
+            value={quantity}
             onChange={(e) =>
               setQuantity(Math.max(1, parseInt(e.target.value) || 1))
             }

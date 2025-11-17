@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react'
-// import Skeleton from "react-loading-skeleton";
 import { Link } from 'react-router-dom'
 
 import Products from "../../components/products/Products";
@@ -50,28 +49,12 @@ const NewArrivals = () => {
     return () => controller.abort();
     },[]);
 
-    
     useEffect(() => {
       FetchProducts();
     }, [FetchProducts]);
   
   const NewProduct = products.slice(0, 4);
     
-    // const SkeletonLoading = () => {
-    //   return (
-    //     <div className="w-full grid grid-cols-1 tab:grid-cols-2 lap:grid-cols-4 gap-4">
-    //       {[...Array(4)].map((_, index) => (
-    //         <div key={index} className="flex flex-col items-center">
-    //           <Skeleton height={200} width={200} />
-    //           <Skeleton height={20} width={200} />
-    //           <Skeleton height={20} width={200} />
-    //           <Skeleton height={30} width={200} />
-    //         </div>
-    //       ))}
-    //     </div>
-    //   );
-    // };
-
   return (
     <section className="text-center py-10 px-4 bg-white">
       <h3 className="text-lg font-medium text-gray-600 uppercase tracking-widest"> Collection </h3>

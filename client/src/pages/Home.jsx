@@ -5,10 +5,10 @@ import Arrivals from '../components/newarrivals/NewArrivals'
 import Edition from '../components/limitededition/LimitedEdition'
 import Seller from '../components/bestseller/BestSeller'
 import Month from '../components/productofmonth/ProductOfMonth'
-import Range from '../components/exploretherange/Exploretherange'
+import ExploresInfo from '../components/Explores/ExploresInfo'
 import Featured from '../components/featured/Featured'
 import Hanpers from '../components/gifthampers/GiftHampers'
-import Suvarna from '../components/suvarnaseries/SuvarnaSeries'
+import Testimonials from '../components/Testimonials/Testimonials'
 
 
 const Home = () => {
@@ -19,10 +19,10 @@ const Home = () => {
       <Edition/>
       <Seller/>
       <Month/>
-      <Range/>
+      <ExploresInfo/>
       <Featured/>
       <Hanpers/>
-      <Suvarna />
+      <Testimonials />
       </>
   )
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Skeleton from "react-loading-skeleton";
 import { Link } from "react-router";
 
+import ProductsLoaders from "../Loaders/ProductLoaders";
 import Products from "../../components/products/Products";
 
 const BestSeller = () => {
@@ -35,19 +35,6 @@ const BestSeller = () => {
     FetchProducts();
   }, [FetchProducts]);
 
-  const SkeletonLoading = () => {
-    return (
-      <>
-        <div className="w-full grid grid-cols-1 tab:grid-cols-1 lap:grid-cols-1 justify-center">
-          <Skeleton height={200} width={200} />
-          <Skeleton height={20} width={200} />
-          <Skeleton height={20} width={200} />
-          <Skeleton height={30} width={200} />
-        </div>
-      </>
-    );
-  };
-
   return (
     <section className="text-center py-10 px-4 bg-white">
       <h3 className="text-lg font-medium text-gray-600 uppercase tracking-widest">Collection</h3>
@@ -56,9 +43,9 @@ const BestSeller = () => {
       {error && <p className="text-red-500 text-sm mb-6">{error}</p>}
 
       <div className="grid grid-cols-1 tab:grid-cols-2 lap:grid-cols-box3 lap:justify-center lap:gap-4 my-4">
-        {NewProduct.map((prod) => {
-          return loading ? <SkeletonLoading /> : <Products Prod={prod} />;
-        })}
+        {loading ? (<ProductsLoaders />) : (
+          NewProduct.map((prod) => <Products key={prod.id} Prod={prod} />)
+        )}
       </div>
 
       <Link to="/perfumes"
