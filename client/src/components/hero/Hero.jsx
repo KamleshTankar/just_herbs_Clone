@@ -13,7 +13,7 @@ import Slide4 from '../../assets/hero/image4.jpg';
 import Slide5 from '../../assets/hero/images5.jpg';
 
 const slides = [
-  { src: Slide1, alt: "Ayurvedic skincare hero banner 1" },
+  { src: Slide1, alt: "Ayurveda's skincare hero banner 1" },
   { src: Slide2, alt: "Natural beauty products hero banner 2" },
   { src: Slide3, alt: "Organic perfumes and attars hero banner 3" },
   { src: Slide4, alt: "Herbal wellness and spa hero banner 4" },
