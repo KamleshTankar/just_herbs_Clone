@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react'
+import { useParams } from "react-router";
 import Skeleton from "react-loading-skeleton";
 
 const Singleproduct = () => {
-    const [loading, setLoading] = useState(true);
-    const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState([]);
+  
+  const { id } = useParams();
     
-      const FeatchProducts = async () => {
+  const FeatchProducts = async () => {
         try {
           const response = await fetch("https://dummyjson.com/products");
           const data = await response.json();
@@ -15,7 +18,10 @@ const Singleproduct = () => {
           console.log(error);
           setLoading(true);
         }
-      };
+    };
+
+  const NewProduct = products.filter((item) => item.id === parseInt(id));
+  console.log(NewProduct[0])
 
       const SkeletonLoading = () => {
         return (
@@ -36,7 +42,6 @@ const Singleproduct = () => {
     
   return (
     <>
-      Singleproduct
       {loading ? (
         <SkeletonLoading />
       ) : (
@@ -44,16 +49,16 @@ const Singleproduct = () => {
           <article>
             <div>
               <div>
-                <img src="" alt="product-image" />
+                <img src={NewProduct[0].thumbnail} alt="product-image" />
               </div>
-              <div>
-                <img src="" alt="product-other-image" />
+              <div className='w-36 h-36 flex'>
+                <img src={NewProduct[0].images[0]} alt="product-other-image" />
               </div>
             </div>
             <div>
-              <h2>product name</h2>
+                <h2>{NewProduct[0].title}</h2>
               <span>
-                <h3>price</h3> <h4>original price</h4>
+                  <h3>price ${NewProduct[0].price}</h3> <h4>original price</h4>
               </span>
               <p>MRP is inclusive of all taxes.</p>
               <div>

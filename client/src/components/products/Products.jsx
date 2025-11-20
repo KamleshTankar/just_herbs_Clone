@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 // import { useDispatch } from "react-redux";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 
 // import { AddToCart } from "../../Redux-Toolkit/Slices/CartSlice";
 
@@ -24,7 +24,7 @@ const Products = React.memo(({ Prod, i }) => {
         className=" h-[140px] w-[140px] my-2 object-contain mix-blend-multiply hover:scale-125 transition duration-300" />
 
       <h2 className="w-full h-8 text-black my-1 text-lg text-center font-serif font-medium truncate">
-        {Prod.title || "Untitled Product"}
+        <Link to={`/collection/product/${Prod.id}`}> {Prod.title || "Untitled Product"} </Link>
       </h2>
 
       <p className="text-gray-700 mt-1 text-sm">
