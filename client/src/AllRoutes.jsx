@@ -21,6 +21,7 @@ import Toners from './pages/skin/Toners'
 import Ubtan from './pages/skin/Ubtan'
 import Gift from "./pages/gift/GiftHamper"
 import SingleProduct from "./components/products/Singleproduct"
+import AddReview from './components/Reviews/AddReview'
 
 const AllRoutes = () => {
   return (
@@ -51,7 +52,9 @@ const AllRoutes = () => {
       
     <Route exact path='gift' element={<Gift />} />
       
-    <Route exact path='collection/product/:id' element={<SingleProduct/>}/>
+    <Route exact path='collection/product/:id' element={<SingleProduct />} />
+    
+    <Route exact path='/review/create-review' element={<AddReview />} />
     
     </Routes>
   )
