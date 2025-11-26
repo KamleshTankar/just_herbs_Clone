@@ -11,20 +11,20 @@ const Singleproduct = () => {
   const [products, setProducts] = useState(null);
   
   const { id } = useParams();
-    
-  const FetchProducts = async () => {
-        try {
-          const response = await fetch(`https://dummyjson.com/products/${id}`);
-          const data = await response.json();
-          setProducts(data);
-        } catch (error) {
-          console.log("Failed to fetch product:", error);
-        } finally {
-          setLoading(false);
-        }
-    };
   
   useEffect(() => {
+    const FetchProducts = async () => {
+          try {
+            const response = await fetch(`https://dummyjson.com/products/${id}`);
+            const data = await response.json();
+            setProducts(data);
+          } catch (error) {
+            console.log("Failed to fetch product:", error);
+          } finally {
+            setLoading(false);
+          }
+    };
+    
     FetchProducts();
   }, [id,]);
 
@@ -79,7 +79,7 @@ const Singleproduct = () => {
       </section>
       <Explores/>
       <Bestseller />
-      <ProductReview/>
+      <ProductReview Id={id} />
     </>
   );
 }

@@ -186,7 +186,7 @@ const ReviewCard = memo(({ review }) => {
 });
 
 /* --------------------------- MAIN PRODUCT REVIEW COMPONENT --------------------------- */
-const ProductReview = () => {
+const ProductReview = ({Id}) => {
   // Mock reviews (can be replaced with API data)
   const reviews = [
     {
@@ -258,7 +258,7 @@ const ProductReview = () => {
           </p>
 
           <Link
-            to="/review/create-review"
+            to={`/review/create-review/${Id}`}
             className="inline-block bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 text-sm shadow"
           >
             Write a product review

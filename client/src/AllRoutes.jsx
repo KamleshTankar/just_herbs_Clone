@@ -54,7 +54,7 @@ const AllRoutes = () => {
       
     <Route exact path='collection/product/:id' element={<SingleProduct />} />
     
-    <Route exact path='/review/create-review' element={<AddReview />} />
+    <Route exact path='/review/create-review/:id' element={<AddReview />} />
     
     </Routes>
   )
