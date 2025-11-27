@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router";
 
+import Bestseller from "../bestseller/BestSeller";
+import Explores from "../Explores/ExploresInfo";
+
 const StarRating = ({ rating, setRating }) => {
   const [hover, setHover] = useState(0);
 
@@ -92,10 +95,16 @@ const AddReview = () => {
       </div>
 
       <div className=" w-4/5 mx-auto flex gap-4 items-center">
-        <img src={product.thumbnail} alt={product.title} className=" w-40 h-40" />
+        <img
+          src={product.thumbnail}
+          alt={product.title}
+          className=" w-40 h-40"
+        />
         <div className="flex flex-col">
-        <h1 className="text-2xl font-semibold">How was the item ?</h1>
-        <h3 className="text-gray-400 text-xl font-medium mb-4">{product?.title}</h3>
+          <h1 className="text-2xl font-semibold">How was the item ?</h1>
+          <h3 className="text-gray-400 text-xl font-medium mb-4">
+            {product?.title}
+          </h3>
         </div>
       </div>
 
@@ -122,12 +131,18 @@ const AddReview = () => {
         <div>
           <h5 className="font-semibold mb-4">Share a video or photo</h5>
           <input
-            type="file" id="file"
+            type="file"
+            id="file"
             name="media"
             onChange={handleChange}
             className="hidden"
           />
-          <label htmlFor="file" className=" px-[30rem] py-3 bg-gray-100 border-2 border-dashed rounded-lg">upload</label>
+          <label
+            htmlFor="file"
+            className=" px-[30rem] py-3 bg-gray-100 border-2 border-dashed rounded-lg"
+          >
+            upload
+          </label>
         </div>
 
         <div>
@@ -152,6 +167,9 @@ const AddReview = () => {
           </button>
         </div>
       </form>
+
+      <Explores />
+      <Bestseller />
     </section>
   );
 };
