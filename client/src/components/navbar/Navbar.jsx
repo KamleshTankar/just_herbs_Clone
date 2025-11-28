@@ -41,6 +41,8 @@ const Navbar = ({ isOpen, setIsOpen }) => {
         }
       }
     }, [token, dispatch]);
+  
+  const cartList = JSON.parse(localStorage.getItem("Cartitem")) || [];
 
   return (
     <>
@@ -89,8 +91,7 @@ const Navbar = ({ isOpen, setIsOpen }) => {
 
           <div className="lap:w-1/5 lap:h-24 flex justify-center items-center">
             <Link to="/" onClick={goTop}>
-              {" "}
-              <h5 className="text-2xl font-semibold">JUST HERBS</h5>{" "}
+              <h5 className="text-2xl font-semibold">JUST HERBS</h5>
             </Link>
           </div>
 
@@ -207,8 +208,7 @@ const Navbar = ({ isOpen, setIsOpen }) => {
                       onClick={goTop}
                       className="block px-4 py-2 hover:bg-gray-100"
                     >
-                      {" "}
-                      Profile{" "}
+                      Profile
                     </Link>
                     <Link
                       to="/resetpassword"
@@ -261,12 +261,14 @@ const Navbar = ({ isOpen, setIsOpen }) => {
               onClick={() => setIsOpen(!isOpen)}
             >
               <TbShoppingCart />
-              {5 > 0 ? (
+              {user ? (
                 <span className="w-6 h-6 absolute right-0 -top-1 text-base text-center font-medium bg-yellow-50 rounded-full">
-                  0 {/* {user.result.cartItems.length} */}
+                  {user.result.cartItems.length}
                 </span>
               ) : (
-                <span className="w-6 h-6 absolute right-0 -top-1 text-base text-center font-medium rounded-full"></span>
+                <span className="w-6 h-6 absolute right-0 -top-1 text-base text-center font-medium bg-yellow-50 rounded-full">
+                  {cartList.length}
+                </span>
               )}
             </button>
           </div>

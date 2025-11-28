@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 // import { useSelector, useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
  
@@ -6,136 +6,244 @@ import { TbLetterX, TbArrowNarrowRight } from "react-icons/tb";
 // import {DELETECART, INCRESEQUANTITY, DECRESEQUANTITY} from "../../slice/CartSlice"
  
 const Cart = ({ isClose, isOpen }) => {
-  const [total, setTotal] = useState(0);
+  const [subtotal, setSubTotal] = useState(0);
+  const [animateId, setAnimateId] = useState(null);
+  const cartRef = useRef(null);
   // const dispatch = useDispatch();
 
   const { cartItems } = useSelector((state) => state.Cart);
+  const { user } = useSelector((state) => state.User);
+  
+  const cartList = JSON.parse(localStorage.getItem("Cartitem")) || [];
 
-    useEffect(() => {
-      if (cartItems) {
-        const Total = cartItems.reduce((accu, curr) => {
-          return accu + curr.price * curr.quantity;
-        }, 0);
-        setTotal(Total);
-      }
-      if (cartItems && cartItems.length > 0) {
-        const calculatedTotal = cartItems.reduce(
+  useEffect(() => {
+    const cartList = JSON.parse(localStorage.getItem("Cartitem")) || [];
+
+    const items = cartItems?.length ? cartItems : cartList;
+
+        const calculatedTotal = items.reduce(
           (acc, item) => acc + item.price * item.quantity,
           0
         );
-        setTotal(calculatedTotal);
-      } else {
-        setTotal(0);
-      }
-    }, [cartItems]);
 
-      const increaseQuantity = (id, quantity) => {
-        if (quantity >= 1) {
-          // dispatch(INCRESEQUANTITY(id, quantity));
+        setSubTotal(calculatedTotal);
+
+  }, [cartItems]);
+  
+    const updateLocalStorage = (updatedItems) => {
+      localStorage.setItem("Cartitem", JSON.stringify(updatedItems));
+  };
+  
+  const runBounceAnimation = (id) => {
+    setAnimateId(id);
+    setTimeout(() => setAnimateId(null), 300);
+  }
+
+  const increaseQuantity = useCallback((id, quantity) => {
+        if (user) {          
+          if (quantity >= 1) {
+            // dispatch(INCRESEQUANTITY(id, quantity));
+            console.log(id);
+          }
+        } else {
+          if (quantity >= 1) {
+            const updated = cartList.map((item) =>
+              item.id === id ? { ...item, quantity: quantity + 1 } : item);
+            updateLocalStorage(updated);
+            runBounceAnimation(id);
+          }
+        }
+  },[user,cartList]);
+
+  const decreaseQuantity = useCallback((id, quantity) => {
+        if (user) {          
+          if (quantity > 1) {
+            // dispatch(DECRESEQUANTITY(id, quantity));
+          }
+        } else {
+          if (quantity > 1) {
+          const updated = cartList.map((item) =>
+            item.id === id ? { ...item, quantity: quantity - 1 } : item
+          );
+            updateLocalStorage(updated);
+            runBounceAnimation(id);
+          }
+        }
+  },[user,cartList]);
+  
+  const removeFromCart = useCallback((id) => {
+        if (user) {
+          // dispatch(DELETECART(id));
+        } else {
+          const updated = cartList.filter((item) => item.id !== id);
+          updateLocalStorage(updated);
+        }
+      }, [user,cartList]);
+  
+    useEffect(() => {
+      const handleClickOutside = (e) => {
+        if (isOpen && cartRef.current && !cartRef.current.contains(e.target)) {
+          isClose();
         }
       };
 
-      const decreaseQuantity = (id, quantity) => {
-        if (quantity > 1) {
-          // dispatch(DECRESEQUANTITY(id, quantity));
-        }
-      };
-      const removeFromCart = (id) => {
-        // dispatch(DELETECART(id));
-      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
+    }, [isOpen, isClose]);
+
+  // const itemsToDisplay = cartItems || cartList;
 
   return (
-    <aside
-      className={`${
-        isOpen ? "right-0" : "right-full"
-      } " w-full h-screen lap:max-w-[40vw] tab:w-[35vw] lap:h-full bg-white fixed right-0 top-0 z-91 mx-auto"`}
+    <aside ref={cartRef}
+      className={`fixed top-0 right-0 z-91 bg-white h-screen w-full lap:max-w-[40vw] tab:w-[35vw] shadow-xl transition-transform duration-500 ease-[cubic-bezier(.25,.8.25,1)] 
+        ${isOpen ? "translate-x-0" : "translate-x-full"}`}
     >
-      <div className=" flex justify-between my-4 px-7">
+      <div className=" flex justify-between items-center px-7 py-4 border-b border-gray-200">
         <h2 className=" text-2xl lap:text-lg">
-          Your shopping cart ({cartItems.length})
+          Your Shopping Cart ({user ? cartItems.length : cartList.length})
         </h2>
         <button
-          onClick={() => isClose()} aria-label="close-cart-button"
-          className=" font-medium text-4xl lap:text-h4"
+          onClick={() => isClose()}
+          aria-label="close-cart-button"
+          className="text-4xl"
         >
           <TbArrowNarrowRight />
         </button>
       </div>
 
-      <div className=" h-[70vh] overflow-y-scroll">
-        {cartItems.length === 0 ? (
-          <p className="text-center mt-10 text-lg">Your cart is empty.</p>
-        ) : (
-          cartItems.map((item, index) => (
-            <div
-              key={item.id || index}
-              className="flex items-start mb-4 border border-black p-2 relative"
-            >
-              {/* Product Image */}
-              <div className="w-[25vw] lap:w-[10vw] h-[13vh] lap:h-[18vh]">
-                <img
-                  src={item.thumbnail}
-                  alt={item.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+      <div className=" h-[70vh] overflow-y-auto px-4 py-3">
+        {user
+          ? cartItems.map((item) => (
+              <div
+                key={item.id}
+                className="flex items-start gap-3 mb-4 border border-gray-300 p-2 rounded-md relative bg-gray-50 animate-fade-in"
+              >
+                {/* Product Image */}
+                <div className="w-[25vw] lap:w-[10vw] h-[13vh] lap:h-[18vh]">
+                  <img
+                    src={item.thumbnail}
+                    alt={item.title}
+                    className="w-full h-full object-cover rounded"
+                  />
+                </div>
 
-              {/* Product Details */}
-              <div className="flex-1 pl-4">
-                <h2 className="text-base font-semibold truncate">
-                  {item.title}
-                </h2>
-                <div className="flex items-center mt-2 gap-4">
-                  {/* Quantity */}
-                  <div className="flex border border-black text-sm">
-                    <button
-                      onClick={() => decreaseQuantity(item.id, item.quantity)}
-                      className="w-8 h-8 bg-gray-200 border-r border-black"
-                    >
-                      -
-                    </button>
-                    <div className="w-8 h-8 flex items-center justify-center">
-                      {item.quantity}
+                {/* Product Details */}
+                <div className="flex-1 pl-4">
+                  <h2 className="text-base font-semibold truncate">
+                    {item.title}
+                  </h2>
+
+                  <div className="flex items-center mt-2 gap-4">
+                    {/* Quantity */}
+                    <div className="flex border border-black text-sm rounded">
+                      <button
+                        className="w-8 h-8 bg-gray-200 border-r border-black"
+                        onClick={() => decreaseQuantity(item.id, item.quantity)}
+                      >
+                        -
+                      </button>
+                      <div className="w-8 h-8 flex items-center justify-center">
+                        {" "}
+                        {item.quantity}{" "}
+                      </div>
+                      <button
+                        className="w-8 h-8 bg-gray-200 border-l border-black"
+                        onClick={() => increaseQuantity(item.id, item.quantity)}
+                      >
+                        +
+                      </button>
                     </div>
-                    <button
-                      onClick={() => increaseQuantity(item.id, item.quantity)}
-                      className="w-8 h-8 bg-gray-200 border-l border-black"
-                    >
-                      +
-                    </button>
-                  </div>
 
-                  {/* Price */}
-                  <div>
+                    {/* Price */}
                     <p className="text-sm font-medium">${item.price}</p>
-                  </div>
 
-                  {/* Total Price */}
-                  <div>
+                    {/* Total Price */}
                     <p className="text-sm font-medium">
                       ${parseFloat(item.price * item.quantity).toFixed(2)}
                     </p>
                   </div>
                 </div>
-              </div>
 
-              {/* Remove Button */}
-              <button
-                onClick={() => removeFromCart(item.id)}
-                className="absolute right-2 top-2 text-xl"
+                {/* Remove Button */}
+                <button
+                  className="absolute right-2 top-2 text-xl text-gray-600 hover:text-red-500"
+                  onClick={() => removeFromCart(item.id)}
+                >
+                  <TbLetterX />
+                </button>
+              </div>
+            ))
+          : cartList.map((item) => (
+              <div
+                key={item.id}
+                className="flex items-start gap-3 mb-4 border border-gray-300 p-2 rounded-md relative bg-gray-50 animate-fade-in"
               >
-                <TbLetterX />
-              </button>
-            </div>
-          ))
-        )}
+                {/* Product Image */}
+                <div className="w-[25vw] lap:w-[10vw] h-[13vh] lap:h-[18vh]">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-full h-full object-cover rounded"
+                  />
+                </div>
+
+                {/* Product Details */}
+                <div className="flex-1 pl-4">
+                  <h2 className="text-base font-semibold truncate">
+                    {item.name}
+                  </h2>
+
+                  <div className="flex items-center mt-2 gap-4">
+                    {/* Quantity */}
+                  <div className={`flex border border-black text-sm rounded transition
+                      ${animateId === item.id ? "animate-quantity-bounce":""}`}>
+                      <button
+                        className="w-8 h-8 bg-gray-200 border-r border-black"
+                        onClick={() => decreaseQuantity(item.id, item.quantity)}
+                      >
+                        -
+                      </button>
+                      <div className="w-8 h-8 flex items-center justify-center">
+                        {item.quantity}
+                      </div>
+                      <button
+                        className="w-8 h-8 bg-gray-200 border-l border-black"
+                        onClick={() => increaseQuantity(item.id, item.quantity)}
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    {/* Price */}
+                    <p className="text-sm font-medium">${item.price}</p>
+
+                    {/* Total Price */}
+                    <p className="text-sm font-medium">
+                      ${parseFloat(item.price * item.quantity).toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Remove Button */}
+                <button
+                  className="absolute right-2 top-2 text-xl text-gray-600 hover:text-red-500"
+                  onClick={() => removeFromCart(item.id)}
+                >
+                  <TbLetterX />
+                </button>
+              </div>
+            ))}
       </div>
 
-      <div className=" flex justify-center items-center gap-8 border-t-2 border-dashed border-black">
-        <div> Subtotal ({cartItems.length}): 
-          <span className="text-xl font-semibold font-mono">  $ {parseFloat(total).toFixed(2)} </span>
+      <div className=" flex justify-center items-center gap-8 border-t-2 border-dashed border-black py-4 bg-white">
+        <div>
+          Subtotal ({user ? cartItems.length : cartList.length}):
+          <span className="text-xl font-semibold font-mono">
+            $ {parseFloat(subtotal).toFixed(2)}
+          </span>
         </div>
-        <button className="w-[200px] text-4h font-semibold p-3 my-4 rounded-md border-2 border-black border-solid bg-transparent text-black hover:bg-black hover:text-white hover:border-black">
+        <button className="w-[200px] text-4h font-semibold p-3 rounded-md border-2 border-black text-black bg-transparent hover:bg-black hover:text-white hover:border-black transition">
           Go To Checkout
         </button>
       </div>

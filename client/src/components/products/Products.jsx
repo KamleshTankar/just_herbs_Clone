@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 // import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router";
 
 // import { AddToCart } from "../../Redux-Toolkit/Slices/CartSlice";
@@ -7,13 +8,30 @@ import { Link, useParams } from "react-router";
 const Products = React.memo(({ Prod, i }) => {
 
   // const dispatch = useDispatch();
-  const { Id } = useParams();
+  const { id } = useParams();
+  const { user } = useSelector((state) => state.User);
 
   const handleAddToCart = useCallback(() => {
     // dispatch(AddToCart({ product, id }));
-    // dispatch(Prod, Id);
-    console.log(Prod.id, Id);
-  }, [Prod, Id]);
+        const newItem = {
+          id: Prod.id,
+          name: Prod.title,
+          image: Prod.thumbnail,
+          price: Prod.price,
+          quantity: 1,
+        };
+
+    if (!user) {
+      // console.log(Prod.id, Prod.title, Prod.thumbnail, Prod.price);
+      const existingCart = JSON.parse(localStorage.getItem("Cartitem")) || [];
+      const updatedCart = [...existingCart, newItem];
+      localStorage.setItem("Cartitem", JSON.stringify(updatedCart));
+      console.log("Guest cart updated:", updatedCart);
+      return;
+    } else {
+      console.log("User logged in, product added via backend:", Prod.id, id);
+    }
+  }, [Prod, id, user]);
   
   return (
     <div
@@ -47,4 +65,4 @@ const Products = React.memo(({ Prod, i }) => {
   );
 });
 
-export default Products;
+export default React.memo(Products);

@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  Navigation,
-  Autoplay,
-  EffectFade,
-} from "swiper/modules";
+import { Navigation, Autoplay, EffectFade } from "swiper/modules";
 import { motion } from "framer-motion";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/thumbs";
 import "swiper/css/effect-fade";
-
-import AddReviewModal from "./AddReview";
 
 // Default fallback data
 const DEFAULT_TESTIMONIALS = [
@@ -64,7 +58,6 @@ const shuffleArray = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
 const Testimonials = () => {
   const [reviews, setReviews] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
 
   // Load reviews from localStorage or use defaults
   useEffect(() => {
@@ -76,11 +69,11 @@ const Testimonials = () => {
     }
   }, []);
 
-  const addReview = (review) => {
-    const updated = [...reviews, review];
-    setReviews(updated);
-    localStorage.setItem("testimonials", JSON.stringify(updated));
-  };
+  // const addReview = (review) => {
+  //   const updated = [...reviews, review];
+  //   setReviews(updated);
+  //   localStorage.setItem("testimonials", JSON.stringify(updated));
+  // };
 
   return (
     <section className="bg-gray-100 py-16 border border-gray-300">
@@ -93,14 +86,6 @@ const Testimonials = () => {
         >
           What Our Customers Say
         </motion.h2>
-
-        {/* ➕ Add Review Button */}
-        <button
-          onClick={() => setModalOpen(true)}
-          className="mb-10 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow"
-        >
-          Add Review
-        </button>
 
         <div className="flex  gap-6">
                     <Swiper
@@ -130,12 +115,6 @@ const Testimonials = () => {
           </Swiper>
         </div>
 
-        {/* Modal */}
-        <AddReviewModal
-          open={modalOpen}
-          setOpen={setModalOpen}
-          addReview={addReview}
-        />
       </div>
     </section>
   );

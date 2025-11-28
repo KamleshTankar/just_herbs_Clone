@@ -29,7 +29,7 @@ module.exports = {
         50: "500",
         "9/6": "9999",
         90: "999",
-        91:"1000",
+        91: "1000",
       },
       boxShadow: {
         // "3xt": "0 10px 15px 0px rgba(255, 83, 48, 35%)",
@@ -141,6 +141,21 @@ module.exports = {
         lap: "1024px",
         desk: "1200px",
         "4k": "2560px",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: 0, transform: "translateY(10px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" },
+        },
+        qtyBounce: {
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.15)" },
+          "100%": { transform: "scale(1)" },
+        },
+      },
+      animation: {
+        "fade-in": "fadeIn 0.4s ease-out forwards",
+        "quantity-bounce": "qtyBounce 0.3s ease-out",
       },
     },
   },
