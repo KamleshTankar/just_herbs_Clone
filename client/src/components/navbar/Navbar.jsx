@@ -263,7 +263,7 @@ const Navbar = ({ isOpen, setIsOpen }) => {
               <TbShoppingCart />
               {user ? (
                 <span className="w-6 h-6 absolute right-0 -top-1 text-base text-center font-medium bg-yellow-50 rounded-full">
-                  {user.result.cartItems.length}
+                  {user.cartItems.length}
                 </span>
               ) : (
                 <span className="w-6 h-6 absolute right-0 -top-1 text-base text-center font-medium bg-yellow-50 rounded-full">

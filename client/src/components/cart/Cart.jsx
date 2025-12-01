@@ -75,6 +75,7 @@ const Cart = ({ isClose, isOpen }) => {
         if (user) {
           // dispatch(DELETECART(id));
         } else {
+          console.log(id);
           const updated = cartList.filter((item) => item.id !== id);
           updateLocalStorage(updated);
         }

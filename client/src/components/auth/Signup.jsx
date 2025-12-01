@@ -21,6 +21,7 @@ const Signup = () => {
   
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const handlechange = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
       navigate("/login");
@@ -43,13 +44,13 @@ const Signup = () => {
       } else { newErrors[field] = ""; };
     });
 
+    if (!formData.gender) newErrors.gender = "Gender is required";
+
     if (formData.Firstname && !/^[A-Za-z]+$/.test(formData.Firstname)) {
       newErrors.Firstname = "First name should contain only letters";
     };
 
-    if (formData.Lastname) {
-      newErrors.Lastname = "First name should contain only letters";
-    };
+    if (formData.Lastname) newErrors.Lastname = "First name should contain only letters";
 
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Enter a valid email address";
@@ -222,7 +223,7 @@ const Signup = () => {
             
             <FormControl sx={{ mb: 2}}>
       <FormLabel id="demo-row-radio-buttons-group-label" error={!!errors.gender}>Gender</FormLabel>
-      <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" onChange={handleChanged} >
+      <RadioGroup row aria-label="demo-row-radio-buttons-group-label" value={formData.gender} name="gender" onChange={handleChanged} >
         <FormControlLabel value="female" control={<Radio />} label="Female" />
         <FormControlLabel value="male" control={<Radio />} label="Male" />
         <FormControlLabel value="other" control={<Radio />} label="Other" />

@@ -1,37 +1,35 @@
 import React, { useCallback } from "react";
 // import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router";
+import { Link } from "react-router";
 
 // import { AddToCart } from "../../Redux-Toolkit/Slices/CartSlice";
 
 const Products = React.memo(({ Prod, i }) => {
 
   // const dispatch = useDispatch();
-  const { id } = useParams();
   const { user } = useSelector((state) => state.User);
 
   const handleAddToCart = useCallback(() => {
-    // dispatch(AddToCart({ product, id }));
-        const newItem = {
-          id: Prod.id,
-          name: Prod.title,
-          image: Prod.thumbnail,
-          price: Prod.price,
-          quantity: 1,
-        };
-
+    const newItem = {
+      id: Prod.id,
+      name: Prod.title,
+      image: Prod.thumbnail,
+      price: Prod.price,
+      quantity: 1,
+    };
+    
     if (!user) {
-      // console.log(Prod.id, Prod.title, Prod.thumbnail, Prod.price);
       const existingCart = JSON.parse(localStorage.getItem("Cartitem")) || [];
       const updatedCart = [...existingCart, newItem];
       localStorage.setItem("Cartitem", JSON.stringify(updatedCart));
       console.log("Guest cart updated:", updatedCart);
       return;
     } else {
-      console.log("User logged in, product added via backend:", Prod.id, id);
+      // dispatch(AddToCart({ product, id, newItem.quantity }));
+      console.log("User logged in, product added via backend:", Prod.id, user._id, newItem.quantity);
     }
-  }, [Prod, id, user]);
+  }, [Prod, user]);
   
   return (
     <div
