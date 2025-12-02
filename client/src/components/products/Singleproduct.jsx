@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import { useSelector } from 'react-redux';
 import { useParams } from "react-router";
 import Skeleton from "react-loading-skeleton";
 
@@ -9,6 +10,9 @@ import ProductReview from '../Reviews/ProductReview';
 const Singleproduct = () => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState(null);
+  const [quantity, setQuantity] = useState();
+
+  const { user } = useSelector((state) => state.User);
   
   const { id } = useParams();
   
@@ -27,6 +31,27 @@ const Singleproduct = () => {
     
     FetchProducts();
   }, [id,]);
+
+    const handleAddToCart = useCallback(() => {
+      const newItem = {
+        id: products.id,
+        name: products.title,
+        image: products.thumbnail,
+        price: products.price,
+        quantity: 1,
+      };
+      
+      if (!user) {
+        const existingCart = JSON.parse(localStorage.getItem("Cartitem")) || [];
+        const updatedCart = [...existingCart, newItem];
+        localStorage.setItem("Cartitem", JSON.stringify(updatedCart));
+        console.log("Guest cart updated:", updatedCart);
+        return;
+      } else {
+        // dispatch(AddToCart({ product, id, newItem.quantity }));
+        console.log("User logged in, product added via backend:", products.id, user._id, quantity);
+      }
+    }, [products, user, quantity]);
 
   const SkeletonLoading = () => {
       return (
@@ -67,10 +92,10 @@ const Singleproduct = () => {
 
         <div>
           <label htmlFor="" className='block mb-1 text-gray-700 font-medium'>Quantity</label>
-          <input type="number" min="1" defaultValue={1} className='w-20 px-3 py-2 border rounded-md focus:ring focus:ring-blue-200'/>
+          <input type="number" min="1" defaultValue={1} onChange={(e)=>{setQuantity(e.target.value)}} className='w-20 px-3 py-2 border rounded-md focus:ring focus:ring-blue-200'/>
         </div>
 
-        <button className='bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-md shadow transition'>Add to Cart</button>
+        <button className='bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-md shadow transition' onClick={handleAddToCart}>Add to Cart</button>
 
         <div className='text-gray-700'><span className='font-medium'>Standard</span></div>
         <div className='text-gray-700'><span className='font-medium'>Sent via courier</span></div>

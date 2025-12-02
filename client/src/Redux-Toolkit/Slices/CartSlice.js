@@ -1,38 +1,59 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API_URL from "../Api/Api";
 
-export const AddToCart = createAsyncThunk("AddToCart", async (Item, Id) => {
+const getErrorMessage = (error) =>
+  error?.response?.data?.message || error.message || "Something went wrong";
+
+export const AddToCart = createAsyncThunk("cart/add", async (Item,{rejectWithValue}) => {
 try {
-    const response = await API_URL.post(`/user/addcart/${Id}`, Item);
+    const response = await API_URL.post("/user/addcart", Item);
     return response.data;
 } catch (error) {
-    throw new Error(`"Failed to add to cart": ${error.message}`);
+  return rejectWithValue(getErrorMessage(error));
     }
 });
-export const IncreseQuantity = createAsyncThunk("IncreseQuantity", async (Item, Id) => {
+export const IncreaseQuantity = createAsyncThunk("cart/increasequantity", async (Item,{rejectWithValue}) => {
   try {
-      const response = await API_URL.post(`/user/increasecart/${Id}`, Item);
+      const response = await API_URL.post("/user/increasecart", Item);
       return response.data;
   } catch (error) {
-      throw new Error("Failed to increase quantity");
+    return rejectWithValue(getErrorMessage(error));
     }
 });
-export const DecreseQuantity = createAsyncThunk("DecreseQuantity", async (Item, Id) => {
+export const DecreaseQuantity = createAsyncThunk("cart/decreasequantity", async (Item,{rejectWithValue}) => {
   try {
-      const response = await API_URL.post(`/user/decreasecart/${Id}`, Item);
+      const response = await API_URL.post("/user/decreasecart", Item);
       return response.data;
   } catch (error) {
-      throw new Error("Failed to decrease quantity");
+    return rejectWithValue(getErrorMessage(error));
     }
 });
-export const DeleteCart = createAsyncThunk("DeleteCart", async (Id) => {
+export const DeleteCart = createAsyncThunk("cart/delete", async (Id,{rejectWithValue}) => {
   try {
       const response = await API_URL.post(`/user/deletecart/${Id}`);
       return response.data;
   } catch (error) {
-      throw new Error("Failed to delete cart item");
+    return rejectWithValue(getErrorMessage(error));
     }
 });
+
+const handlePending = (state) => {
+  state.loading = true;
+  state.error = null;
+  state.status = "loading";
+};
+
+const handleFulfilled = (state, action) => {
+  state.loading = false;
+  state.cartItems = action.payload; // replace with full data from backend
+  state.status = "succeeded";
+};
+
+const handleRejected = (state, action) => {
+  state.loading = false;
+  state.status = "failed";
+  state.error = action.payload || action.error.message;
+};
 
 export const CartSlice = createSlice({
   name: "Cart",
@@ -40,71 +61,23 @@ export const CartSlice = createSlice({
     cartItems: [],
     loading: false,
     error: null,
-    status: "idel",
+    status: "idle",
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(AddToCart.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.status = "loading";
-      })
-      .addCase(AddToCart.fulfilled, (state, action) => {
-        state.loading = false;
-        state.cartItems = action.payload;
-        state.status = "successsed";
-      })
-      .addCase(AddToCart.rejected, (state, action) => {
-        state.loading = false;
-        state.status = "failed";
-        state.error = action.error.message;
-      })
-      .addCase(IncreseQuantity.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.status = "loading";
-      })
-      .addCase(IncreseQuantity.fulfilled, (state, action) => {
-        state.loading = false;
-        state.cartItems = action.payload;
-        state.status = "successsed";
-      })
-      .addCase(IncreseQuantity.rejected, (state, action) => {
-        state.loading = false;
-        state.status = "failed";
-        state.error = action.error.message;
-      })
-      .addCase(DecreseQuantity.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.status = "loading";
-      })
-      .addCase(DecreseQuantity.fulfilled, (state, action) => {
-        state.loading = false;
-        state.cartItems = action.payload;
-        state.status = "successsed";
-      })
-      .addCase(DecreseQuantity.rejected, (state, action) => {
-        state.loading = false;
-        state.status = "failed";
-        state.error = action.error.message;
-      })
-      .addCase(DeleteCart.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.status = "loading";
-      })
-      .addCase(DeleteCart.fulfilled, (state, action) => {
-        state.loading = false;
-        state.cartItems = action.payload;
-        state.status = "successsed";
-      })
-      .addCase(DeleteCart.rejected, (state, action) => {
-        state.loading = false;
-        state.status = "failed";
-        state.error = action.error.message;
-      });
+      .addCase(AddToCart.pending, handlePending)
+      .addCase(AddToCart.fulfilled, handleFulfilled)
+      .addCase(AddToCart.rejected, handleRejected)
+      .addCase(IncreaseQuantity.pending, handlePending)
+      .addCase(IncreaseQuantity.fulfilled, handleFulfilled)
+      .addCase(IncreaseQuantity.rejected, handleRejected)
+      .addCase(DecreaseQuantity.pending, handlePending)
+      .addCase(DecreaseQuantity.fulfilled, handleFulfilled)
+      .addCase(DecreaseQuantity.rejected, handleRejected)
+      .addCase(DeleteCart.pending, handlePending)
+      .addCase(DeleteCart.fulfilled, handleFulfilled)
+      .addCase(DeleteCart.rejected, handleRejected);
   },
 });
 

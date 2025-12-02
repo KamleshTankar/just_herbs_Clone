@@ -4,8 +4,8 @@ import Product from "../../models/Productmodel.js";
 
 
 export const addproduct = async (req, res) => {
-  const { id: _id } = req.params;
-  const { productid, quantity } = req.body.cartItems;
+  // const { id: _id } = req.params;
+  const { productid, quantity, id:_id } = req.body.cartItems;
 
   try {
     const user = await userslist.findOne({ _id });
@@ -118,7 +118,7 @@ export const deleteCartproduct = async (req, res) => {
 };
 
 export const getAllCarts = async (req, res) => {
-  const { id: _id } = req.params;
+  const { id: _id } = req.body;
   
   try {
       const Users = await userslist.findOne({ _id }).populate("cartItems.productid");

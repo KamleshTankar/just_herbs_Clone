@@ -21,11 +21,11 @@ router.patch("/updateprofile/:id", updateProfile);
 
 router.get("/Getallproducts", Getallproducts);
 
-router.post("/addtocart/:id", addproduct);
-router.patch("/increseQuantity/:id", auth, increseQuantity);
-router.patch("/decreseQuantity/:id", auth, decreseQuantity);
-router.delete("/deleteCart/:id", auth, deleteCartproduct);
-router.get("/AllCarts/:id", getAllCarts);
+router.post("/addtocart", addproduct);
+router.patch("/increseQuantity", auth, increseQuantity);
+router.patch("/decreseQuantity", auth, decreseQuantity);
+router.delete("/deleteCart", auth, deleteCartproduct);
+router.get("/AllCarts", getAllCarts);
 
 router.post("/createorder", createOrder);
 router.get("/myorders/:id", getMyOrders);

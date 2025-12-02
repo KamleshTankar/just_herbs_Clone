@@ -1,13 +1,14 @@
-import React, { useCallback } from "react";
-// import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import React, { useCallback, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router";
 
-// import { AddToCart } from "../../Redux-Toolkit/Slices/CartSlice";
+import { AddToCart } from "../../Redux-Toolkit/Slices/CartSlice";
 
-const Products = React.memo(({ Prod, i }) => {
+const Products = ({ Prod }) => {
+  const [loaded, setLoaded] = useState(false);
 
-  // const dispatch = useDispatch();
+
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.User);
 
   const handleAddToCart = useCallback(() => {
@@ -21,23 +22,33 @@ const Products = React.memo(({ Prod, i }) => {
     
     if (!user) {
       const existingCart = JSON.parse(localStorage.getItem("Cartitem")) || [];
-      const updatedCart = [...existingCart, newItem];
-      localStorage.setItem("Cartitem", JSON.stringify(updatedCart));
-      console.log("Guest cart updated:", updatedCart);
+
+      const index = existingCart.findIndex((p) => p.id === newItem.id);
+
+      if (index > -1) {
+        existingCart[index].quantity += 1;
+        const updatedQty=[...existingCart]
+        localStorage.setItem("Cartitem", JSON.stringify(updatedQty));
+        alert("cart already avaliable quantity updated");
+      } else {        
+        const updatedCart = [...existingCart, newItem];
+        localStorage.setItem("Cartitem", JSON.stringify(updatedCart));
+        alert("Guest cart updated:", updatedCart);
+      }
       return;
     } else {
-      // dispatch(AddToCart({ product, id, newItem.quantity }));
-      console.log("User logged in, product added via backend:", Prod.id, user._id, newItem.quantity);
+      alert("User logged in, product added via backend:", Prod.id, user._id, newItem.quantity);
+      dispatch(AddToCart({ productId:Prod.id, userId:user.id, quantity:newItem.quantity }));
     }
-  }, [Prod, user]);
+  }, [Prod, user, dispatch]);
   
   return (
     <div
-      key={i}
       className="w-full h-auto py-4 Lp-l:mx-0 flex flex-col justify-center items-center border-2 hover:border-black rounded-md"
     >
       <img src={Prod.thumbnail || "/placeholder.jpg"} alt={Prod.title || "Product image"} loading="lazy"
-        className=" h-[140px] w-[140px] my-2 object-contain mix-blend-multiply hover:scale-125 transition duration-300" />
+        srcSet={`${Prod.thumbnail}? w=200 200w,${Prod.thumbnail}? W=400 400w,${Prod.thumbnail}? w=800 800w`} sizes="(max-with:600px)200px, 400px"
+        className={`h-[140px] w-[140px] my-2 object-contain mix-blend-multiply hover:scale-125 transition duration-300 ${loaded ? "blur-0 scale-100":"blur-xl scale-110"}`} onLoad={()=>setLoaded(true)} />
 
       <h2 className="w-full h-8 text-black my-1 text-lg text-center font-serif font-medium truncate">
         <Link to={`/collection/product/${Prod.id}`}> {Prod.title || "Untitled Product"} </Link>
@@ -61,6 +72,6 @@ const Products = React.memo(({ Prod, i }) => {
       </button>
     </div>
   );
-});
+};
 
 export default React.memo(Products);

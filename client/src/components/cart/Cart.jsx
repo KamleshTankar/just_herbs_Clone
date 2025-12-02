@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 // import { useSelector, useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
  
@@ -14,7 +14,7 @@ const Cart = ({ isClose, isOpen }) => {
   const { cartItems } = useSelector((state) => state.Cart);
   const { user } = useSelector((state) => state.User);
   
-  const cartList = JSON.parse(localStorage.getItem("Cartitem")) || [];
+  const cartList = useMemo(() => JSON.parse(localStorage.getItem("Cartitem")) || [], []);
 
   useEffect(() => {
     const cartList = JSON.parse(localStorage.getItem("Cartitem")) || [];
@@ -28,7 +28,7 @@ const Cart = ({ isClose, isOpen }) => {
 
         setSubTotal(calculatedTotal);
 
-  }, [cartItems]);
+  }, [cartItems, cartList]);
   
     const updateLocalStorage = (updatedItems) => {
       localStorage.setItem("Cartitem", JSON.stringify(updatedItems));
