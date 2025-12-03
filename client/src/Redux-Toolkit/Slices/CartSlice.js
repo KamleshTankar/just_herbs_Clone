@@ -37,6 +37,15 @@ export const DeleteCart = createAsyncThunk("cart/delete", async (Id,{rejectWithV
     }
 });
 
+export const GetAllCart = createAsyncThunk("cart/getall", async (Id, { rejectWithValue }) => {
+    try {
+      const response = await API_URL.post("/user/AllCarts", Id);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
+    }
+});
+
 const handlePending = (state) => {
   state.loading = true;
   state.error = null;
@@ -77,7 +86,10 @@ export const CartSlice = createSlice({
       .addCase(DecreaseQuantity.rejected, handleRejected)
       .addCase(DeleteCart.pending, handlePending)
       .addCase(DeleteCart.fulfilled, handleFulfilled)
-      .addCase(DeleteCart.rejected, handleRejected);
+      .addCase(DeleteCart.rejected, handleRejected)
+      .addCase(GetAllCart.pending, handlePending)
+      .addCase(GetAllCart.fulfilled, handleFulfilled)
+      .addCase(GetAllCart.rejected, handleRejected);
   },
 });
 
