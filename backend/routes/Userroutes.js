@@ -25,7 +25,7 @@ router.post("/addtocart", addproduct);
 router.patch("/increseQuantity", auth, increseQuantity);
 router.patch("/decreseQuantity", auth, decreseQuantity);
 router.delete("/deleteCart", auth, deleteCartproduct);
-router.get("/AllCarts", getAllCarts);
+router.post("/AllCarts", getAllCarts);
 
 router.post("/createorder", createOrder);
 router.get("/myorders/:id", getMyOrders);

@@ -4,8 +4,7 @@ import Product from "../../models/Productmodel.js";
 
 
 export const addproduct = async (req, res) => {
-  // const { id: _id } = req.params;
-  const { productid, quantity, id:_id } = req.body.cartItems;
+  const { productid, quantity, id:_id } = req.body;
 
   try {
     const user = await userslist.findOne({ _id });
@@ -118,17 +117,23 @@ export const deleteCartproduct = async (req, res) => {
 };
 
 export const getAllCarts = async (req, res) => {
-  const { id: _id } = req.body;
-  
+  const { id: userId } = req.body;
+
   try {
-      const Users = await userslist.findOne({ _id }).populate("cartItems.productid");
-      const allCartDetails = [];
-      allCartDetails.push({
-        cartproducts: Users.cartItems,
-      });
-      res.status(200).json(allCartDetails);
+        if (!userId) {
+          return res.status(400).json({ message: "User ID is required" });
+    }
+    
+      const User = await userslist.findOne({ _id:userId }).populate("cartItems.productid");
+      
+        if (!User) {
+          return res.status(404).json({ message: "User not found" });
+    }
+    
+        res.status(200).json( User.cartItems);
+        
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 

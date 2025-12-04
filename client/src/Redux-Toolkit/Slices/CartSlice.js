@@ -5,13 +5,15 @@ const getErrorMessage = (error) =>
   error?.response?.data?.message || error.message || "Something went wrong";
 
 export const AddToCart = createAsyncThunk("cart/add", async (Item,{rejectWithValue}) => {
-try {
+  console.log(Item);
+  try {
     const response = await API_URL.post("/user/addcart", Item);
     return response.data;
 } catch (error) {
   return rejectWithValue(getErrorMessage(error));
     }
 });
+
 export const IncreaseQuantity = createAsyncThunk("cart/increasequantity", async (Item,{rejectWithValue}) => {
   try {
       const response = await API_URL.post("/user/increasecart", Item);
@@ -20,6 +22,7 @@ export const IncreaseQuantity = createAsyncThunk("cart/increasequantity", async 
     return rejectWithValue(getErrorMessage(error));
     }
 });
+
 export const DecreaseQuantity = createAsyncThunk("cart/decreasequantity", async (Item,{rejectWithValue}) => {
   try {
       const response = await API_URL.post("/user/decreasecart", Item);
@@ -28,6 +31,7 @@ export const DecreaseQuantity = createAsyncThunk("cart/decreasequantity", async 
     return rejectWithValue(getErrorMessage(error));
     }
 });
+
 export const DeleteCart = createAsyncThunk("cart/delete", async (Id,{rejectWithValue}) => {
   try {
       const response = await API_URL.post(`/user/deletecart/${Id}`);
@@ -37,9 +41,9 @@ export const DeleteCart = createAsyncThunk("cart/delete", async (Id,{rejectWithV
     }
 });
 
-export const GetAllCart = createAsyncThunk("cart/getall", async (Id, { rejectWithValue }) => {
-    try {
-      const response = await API_URL.post("/user/AllCarts", Id);
+export const GetAllCart = createAsyncThunk("cart/getallcarts", async (id, { rejectWithValue }) => {
+  try {
+    const response = await API_URL.post("/user/AllCarts", id);
       return response.data;
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
@@ -50,12 +54,6 @@ const handlePending = (state) => {
   state.loading = true;
   state.error = null;
   state.status = "loading";
-};
-
-const handleFulfilled = (state, action) => {
-  state.loading = false;
-  state.cartItems = action.payload; // replace with full data from backend
-  state.status = "succeeded";
 };
 
 const handleRejected = (state, action) => {
@@ -76,19 +74,39 @@ export const CartSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(AddToCart.pending, handlePending)
-      .addCase(AddToCart.fulfilled, handleFulfilled)
+      .addCase(AddToCart.fulfilled, (state, action) => { 
+        state.loading = false;
+        state.status = "succeeded";
+        state.cartItems = action.payload;
+      })
       .addCase(AddToCart.rejected, handleRejected)
       .addCase(IncreaseQuantity.pending, handlePending)
-      .addCase(IncreaseQuantity.fulfilled, handleFulfilled)
+      .addCase(IncreaseQuantity.fulfilled, (state, action) => {
+        state.loading = false;
+        state.status = "succeeded";
+        state.cartItems = action.payload;
+      })
       .addCase(IncreaseQuantity.rejected, handleRejected)
       .addCase(DecreaseQuantity.pending, handlePending)
-      .addCase(DecreaseQuantity.fulfilled, handleFulfilled)
+      .addCase(DecreaseQuantity.fulfilled, (state, action) => {
+        state.loading = false;
+        state.status = "succeeded";
+        state.cartItems = action.payload;
+      })
       .addCase(DecreaseQuantity.rejected, handleRejected)
       .addCase(DeleteCart.pending, handlePending)
-      .addCase(DeleteCart.fulfilled, handleFulfilled)
+      .addCase(DeleteCart.fulfilled, (state, action) => {
+        state.loading = false;
+        state.status = "succeeded";
+        state.cartItems = action.payload;
+      })
       .addCase(DeleteCart.rejected, handleRejected)
       .addCase(GetAllCart.pending, handlePending)
-      .addCase(GetAllCart.fulfilled, handleFulfilled)
+      .addCase(GetAllCart.fulfilled, (state, action) => { 
+        state.loading = false;
+        state.status = "succeeded";
+        state.cartItems = action.payload;
+      })
       .addCase(GetAllCart.rejected, handleRejected);
   },
 });

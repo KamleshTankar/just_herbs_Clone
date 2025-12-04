@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
-// import { useSelector, useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
- 
+import { useSelector, useDispatch } from "react-redux";
+
 import { TbLetterX, TbArrowNarrowRight } from "react-icons/tb";
 // import {DELETECART, INCRESEQUANTITY, DECRESEQUANTITY} from "../../slice/CartSlice"
- 
+import { GetAllCart } from "../../Redux-Toolkit/Slices/CartSlice";
+
 const Cart = ({ isClose, isOpen }) => {
   const [subtotal, setSubTotal] = useState(0);
   const [animateId, setAnimateId] = useState(null);
   const cartRef = useRef(null);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const { cartItems } = useSelector((state) => state.Cart);
   const { user } = useSelector((state) => state.User);
-  
+
   const cartList = useMemo(() => JSON.parse(localStorage.getItem("Cartitem")) || [], []);
 
   useEffect(() => {
@@ -21,14 +21,16 @@ const Cart = ({ isClose, isOpen }) => {
 
     const items = cartItems?.length ? cartItems : cartList;
 
-        const calculatedTotal = items.reduce(
-          (acc, item) => acc + item.price * item.quantity,
-          0
-        );
+    const calculatedTotal = items.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
 
-        setSubTotal(calculatedTotal);
+    setSubTotal(calculatedTotal);
 
-  }, [cartItems, cartList]);
+    dispatch(GetAllCart({id:user?._id}));
+
+  }, [cartItems, cartList, user, dispatch]);
   
     const updateLocalStorage = (updatedItems) => {
       localStorage.setItem("Cartitem", JSON.stringify(updatedItems));
@@ -116,10 +118,10 @@ const Cart = ({ isClose, isOpen }) => {
       <div className=" h-[70vh] overflow-y-auto px-4 py-3">
         {user
           ? cartItems.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-start gap-3 mb-4 border border-gray-300 p-2 rounded-md relative bg-gray-50 animate-fade-in"
-              >
+            <div
+            key={item.id}
+            className="flex items-start gap-3 mb-4 border border-gray-300 p-2 rounded-md relative bg-gray-50 animate-fade-in"
+            >
                 {/* Product Image */}
                 <div className="w-[25vw] lap:w-[10vw] h-[13vh] lap:h-[18vh]">
                   <img
@@ -132,7 +134,7 @@ const Cart = ({ isClose, isOpen }) => {
                 {/* Product Details */}
                 <div className="flex-1 pl-4">
                   <h2 className="text-base font-semibold truncate">
-                    {item.title}
+                    {item.name}
                   </h2>
 
                   <div className="flex items-center mt-2 gap-4">
