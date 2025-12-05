@@ -6,34 +6,31 @@ import { TbLetterX, TbArrowNarrowRight } from "react-icons/tb";
 import { GetAllCart } from "../../Redux-Toolkit/Slices/CartSlice";
 
 const Cart = ({ isClose, isOpen }) => {
-  const [subtotal, setSubTotal] = useState(0);
   const [animateId, setAnimateId] = useState(null);
+  const [guestCart, setGuestCart] = useState(() => {
+    return JSON.parse(localStorage.getItem("Cartitem")) || [];
+  });
+
   const cartRef = useRef(null);
   const dispatch = useDispatch();
 
   const { cartItems } = useSelector((state) => state.Cart);
   const { user } = useSelector((state) => state.User);
 
-  const cartList = useMemo(() => JSON.parse(localStorage.getItem("Cartitem")) || [], []);
-
   useEffect(() => {
-    const cartList = JSON.parse(localStorage.getItem("Cartitem")) || [];
+    if (user?._id) {
+      dispatch(GetAllCart({ id: user._id }));
+    }
+  }, [user?._id, dispatch]);
 
-    const items = cartItems?.length ? cartItems : cartList;
-
-    const calculatedTotal = items.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    );
-
-    setSubTotal(calculatedTotal);
-
-    dispatch(GetAllCart({id:user?._id}));
-
-  }, [cartItems, cartList, user, dispatch]);
+    const subtotal = useMemo(() => {
+      const items = user ? cartItems : guestCart;
+      return items.reduce((acc, i) => acc + i.price * i.quantity, 0);
+    }, [user, cartItems, guestCart]);
   
-    const updateLocalStorage = (updatedItems) => {
-      localStorage.setItem("Cartitem", JSON.stringify(updatedItems));
+  const syncLocalStorage = (updated) => {
+        setGuestCart(updated);
+        localStorage.setItem("Cartitem", JSON.stringify(updated));
   };
   
   const runBounceAnimation = (id) => {
@@ -41,47 +38,41 @@ const Cart = ({ isClose, isOpen }) => {
     setTimeout(() => setAnimateId(null), 300);
   }
 
-  const increaseQuantity = useCallback((id, quantity) => {
+  const increaseQuantity = useCallback((id) => {
         if (user) {          
-          if (quantity >= 1) {
-            // dispatch(INCRESEQUANTITY(id, quantity));
-            console.log(id);
-          }
+          // dispatch(INCRESEQUANTITY(id, quantity));
+          console.log(id);
         } else {
-          if (quantity >= 1) {
-            const updated = cartList.map((item) =>
-              item.id === id ? { ...item, quantity: quantity + 1 } : item);
-            updateLocalStorage(updated);
+            const updated = guestCart.map((item) =>
+              item.id === id ? { ...item, quantity: item.quantity + 1 } : item);
+            syncLocalStorage(updated);
             runBounceAnimation(id);
-          }
         }
-  },[user,cartList]);
+  },[user, guestCart]);
 
-  const decreaseQuantity = useCallback((id, quantity) => {
+  const decreaseQuantity = useCallback((id) => {
         if (user) {          
-          if (quantity > 1) {
-            // dispatch(DECRESEQUANTITY(id, quantity));
-          }
+          // dispatch(DECRESEQUANTITY(id, quantity));
+          console.log(id);
         } else {
-          if (quantity > 1) {
-          const updated = cartList.map((item) =>
-            item.id === id ? { ...item, quantity: quantity - 1 } : item
+          const updated = guestCart.map((item) =>
+            item.id === id ? { ...item, quantity: item.quantity - 1 } : item
           );
-            updateLocalStorage(updated);
+            syncLocalStorage(updated);
             runBounceAnimation(id);
-          }
+          
         }
-  },[user,cartList]);
+  },[user, guestCart]);
   
   const removeFromCart = useCallback((id) => {
         if (user) {
           // dispatch(DELETECART(id));
-        } else {
           console.log(id);
-          const updated = cartList.filter((item) => item.id !== id);
-          updateLocalStorage(updated);
+        } else {
+          const updated = guestCart.filter((item) => item.id !== id);
+          syncLocalStorage(updated);
         }
-      }, [user,cartList]);
+      }, [user,guestCart]);
   
     useEffect(() => {
       const handleClickOutside = (e) => {
@@ -95,8 +86,6 @@ const Cart = ({ isClose, isOpen }) => {
         document.removeEventListener("mousedown", handleClickOutside);
     }, [isOpen, isClose]);
 
-  // const itemsToDisplay = cartItems || cartList;
-
   return (
     <aside ref={cartRef}
       className={`fixed top-0 right-0 z-91 bg-white h-screen w-full lap:max-w-[40vw] tab:w-[35vw] shadow-xl transition-transform duration-500 ease-[cubic-bezier(.25,.8.25,1)] 
@@ -104,7 +93,7 @@ const Cart = ({ isClose, isOpen }) => {
     >
       <div className=" flex justify-between items-center px-7 py-4 border-b border-gray-200">
         <h2 className=" text-2xl lap:text-lg">
-          Your Shopping Cart ({user ? cartItems.length : cartList.length})
+          Your Shopping Cart ({user ? cartItems.length : guestCart.length})
         </h2>
         <button
           onClick={() => isClose()}
@@ -177,7 +166,7 @@ const Cart = ({ isClose, isOpen }) => {
                 </button>
               </div>
             ))
-          : cartList.map((item) => (
+          : guestCart.map((item) => (
               <div
                 key={item.id}
                 className="flex items-start gap-3 mb-4 border border-gray-300 p-2 rounded-md relative bg-gray-50 animate-fade-in"
@@ -241,7 +230,7 @@ const Cart = ({ isClose, isOpen }) => {
 
       <div className=" flex justify-center items-center gap-8 border-t-2 border-dashed border-black py-4 bg-white">
         <div>
-          Subtotal ({user ? cartItems.length : cartList.length}):
+          Subtotal ({user ? cartItems.length : guestCart.length}):
           <span className="text-xl font-semibold font-mono">
             $ {parseFloat(subtotal).toFixed(2)}
           </span>

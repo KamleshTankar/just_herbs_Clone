@@ -4,24 +4,28 @@ import Product from "../../models/Productmodel.js";
 
 
 export const addproduct = async (req, res) => {
-  const { productid, quantity, id:_id } = req.body;
+  const { productId, quantity, userId } = req.body;
 
   try {
-    const user = await userslist.findOne({ _id });
+    if (!productId || !quantity || !userId) {
+      return res.status(400).json({ message: "Product ID, quantity, and user ID are required" });
+    }
+
+    const user = await userslist.findOne({ _id:userId });
 
     // ✅ Fetch prices from DB and calculate total
-            const Data = await Product.findById(productid);
+            const Data = await Product.findById(productId);
             const name = Data.Title; // Assuming Title is the name of the product
             const price = Data.price; // Assuming price is the price of the product
             const image = Data.Image; // Assuming Image is the image of the product
             const Category = Data.Category; // Assuming Image is the image of the product
     
-    const cartIndex = user.cartItems.findIndex((p) => p.productid.toString() === productid);
+    const cartIndex = user.cartItems.findIndex((p) => p.productid.toString() === productId);
 
       if (cartIndex > -1) {
         user.cartItems[cartIndex].quantity += req.body.cartItems.quantity;
       } else {
-        user.cartItems.push({ productid, name, Category, image, price, quantity });
+        user.cartItems.push({ productId, name, Category, image, price, quantity });
       }
 
       const updatedUser = await user.save();

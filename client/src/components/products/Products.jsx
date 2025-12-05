@@ -19,8 +19,10 @@ const Products = ({ Prod }) => {
       price: Prod.price,
       quantity: 1,
     };
-    
-    if (!user) {
+
+    if (user) {
+      dispatch(AddToCart({ productId:Prod.id, userId:user?._id, quantity:newItem.quantity }));
+    }else {
       const existingCart = JSON.parse(localStorage.getItem("Cartitem")) || [];
 
       const index = existingCart.findIndex((p) => p.id === newItem.id);
@@ -35,11 +37,7 @@ const Products = ({ Prod }) => {
         localStorage.setItem("Cartitem", JSON.stringify(updatedCart));
         alert("Guest cart updated:", updatedCart);
       }
-      return;
-    } else {
-      alert("User logged in, product added via backend:", Prod.id, user._id, newItem.quantity);
-      dispatch(AddToCart({ productId:Prod.id, userId:user.id, quantity:newItem.quantity }));
-    }
+    } 
   }, [Prod, user, dispatch]);
   
   return (
