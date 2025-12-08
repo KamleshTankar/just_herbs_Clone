@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback, useRef, useMemo } from "react"
 import { useSelector, useDispatch } from "react-redux";
 
 import { TbLetterX, TbArrowNarrowRight } from "react-icons/tb";
-// import {DELETECART, INCRESEQUANTITY, DECRESEQUANTITY} from "../../slice/CartSlice"
-import { GetAllCart } from "../../Redux-Toolkit/Slices/CartSlice";
+
+import { GetAllCart, IncreaseQuantity, DecreaseQuantity, DeleteCart } from "../../Redux-Toolkit/Slices/CartSlice";
 
 const Cart = ({ isClose, isOpen }) => {
   const [animateId, setAnimateId] = useState(null);
@@ -40,7 +40,7 @@ const Cart = ({ isClose, isOpen }) => {
 
   const increaseQuantity = useCallback((id) => {
         if (user) {          
-          // dispatch(INCRESEQUANTITY(id, quantity));
+          dispatch(IncreaseQuantity(id));
           console.log(id);
         } else {
             const updated = guestCart.map((item) =>
@@ -48,11 +48,11 @@ const Cart = ({ isClose, isOpen }) => {
             syncLocalStorage(updated);
             runBounceAnimation(id);
         }
-  },[user, guestCart]);
+  },[user, guestCart, dispatch]);
 
   const decreaseQuantity = useCallback((id) => {
         if (user) {          
-          // dispatch(DECRESEQUANTITY(id, quantity));
+          dispatch(DecreaseQuantity(id));
           console.log(id);
         } else {
           const updated = guestCart.map((item) =>
@@ -62,17 +62,17 @@ const Cart = ({ isClose, isOpen }) => {
             runBounceAnimation(id);
           
         }
-  },[user, guestCart]);
+  },[user, guestCart, dispatch]);
   
   const removeFromCart = useCallback((id) => {
         if (user) {
-          // dispatch(DELETECART(id));
+          dispatch(DeleteCart(id));
           console.log(id);
         } else {
           const updated = guestCart.filter((item) => item.id !== id);
           syncLocalStorage(updated);
         }
-      }, [user,guestCart]);
+      }, [user,guestCart, dispatch]);
   
     useEffect(() => {
       const handleClickOutside = (e) => {

@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import Auth from './pages/auth/Auth'
 import Login from './components/auth/Login'
 import Signup from './components/auth/Signup'
+import Profile from './components/profile/Profile'
 import Perfumes from './pages/perfumes/Perfumes'
 import AquaPerfumes from './pages/perfumes/AquaPerfumes'
 import OudPerfumes from './pages/perfumes/OudPerfumes'
@@ -31,6 +32,7 @@ const AllRoutes = () => {
     <Route exact path='auth' element={<Auth />} />
     <Route exact path='login' element={<Login />} />
     <Route exact path='signup' element={<Signup />} />
+    <Route exact path='profile' element={<Profile />} />
 
     <Route exact path='perfumes' element={<Perfumes />} />
     <Route exact path='aquaperfumes' element={ <AquaPerfumes/>} />
