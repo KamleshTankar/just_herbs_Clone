@@ -6,6 +6,8 @@ import Auth from './pages/auth/Auth'
 import Login from './components/auth/Login'
 import Signup from './components/auth/Signup'
 import Profile from './components/profile/Profile'
+import ResetPassword from './components/profile/RestPassword'
+import EditProfile from './components/profile/ProfileEdit'
 import Perfumes from './pages/perfumes/Perfumes'
 import AquaPerfumes from './pages/perfumes/AquaPerfumes'
 import OudPerfumes from './pages/perfumes/OudPerfumes'
@@ -32,7 +34,9 @@ const AllRoutes = () => {
     <Route exact path='auth' element={<Auth />} />
     <Route exact path='login' element={<Login />} />
     <Route exact path='signup' element={<Signup />} />
+    <Route exact path='profile/resetpassword' element={<ResetPassword />} />
     <Route exact path='profile' element={<Profile />} />
+    <Route exact path='profile/edit' element={<EditProfile />} />
 
     <Route exact path='perfumes' element={<Perfumes />} />
     <Route exact path='aquaperfumes' element={ <AquaPerfumes/>} />

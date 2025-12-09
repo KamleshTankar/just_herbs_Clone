@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { TbLetterX, TbArrowNarrowRight } from "react-icons/tb";
 
@@ -13,6 +14,7 @@ const Cart = ({ isClose, isOpen }) => {
 
   const cartRef = useRef(null);
   const dispatch = useDispatch();
+  const navigator = useNavigate();
 
   const { cartItems } = useSelector((state) => state.Cart);
   const { user } = useSelector((state) => state.User);
@@ -72,7 +74,17 @@ const Cart = ({ isClose, isOpen }) => {
           const updated = guestCart.filter((item) => item.id !== id);
           syncLocalStorage(updated);
         }
-      }, [user,guestCart, dispatch]);
+  }, [user, guestCart, dispatch]);
+  
+  const CheckOut=()=>{
+    if(user){
+      //redirect to checkout page
+      navigator('/checkout');
+    }else{
+      //redirect to login page
+      navigator('/login');
+    }
+  }
   
     useEffect(() => {
       const handleClickOutside = (e) => {
@@ -235,7 +247,7 @@ const Cart = ({ isClose, isOpen }) => {
             $ {parseFloat(subtotal).toFixed(2)}
           </span>
         </div>
-        <button className="w-[200px] text-4h font-semibold p-3 rounded-md border-2 border-black text-black bg-transparent hover:bg-black hover:text-white hover:border-black transition">
+        <button type="button" onClick={CheckOut} className="w-[200px] text-4h font-semibold p-3 rounded-md border-2 border-black text-black bg-transparent hover:bg-black hover:text-white hover:border-black transition">
           Go To Checkout
         </button>
       </div>
