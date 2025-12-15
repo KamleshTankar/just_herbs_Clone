@@ -14,7 +14,7 @@ export const Getallproducts = async (req, res) => {
             Image:product.Image,
             price: product.price,
             Description: product.Description,
-            Quntity: product.Quantity,
+            Quantity: product.Quantity,
             joinedOn: product.updatedOn,
           });
         });
@@ -25,31 +25,33 @@ export const Getallproducts = async (req, res) => {
 };
 
 export const Addproduct = async (req, res) => {
-  const { Title, Category, Image, Description, price, Quantity } = req.body;
+  const { Title, Category, Sub_Category, Image, Images, Description, price, Quantity } = req.body;
   try {
-    const existingproduct = await products.findOne({ Title });
-    if (existingproduct) {
+    const ExistingProduct = await products.findOne({ Title });
+    if (ExistingProduct) {
       return res.status(404).json({ message: "Product already Exist." });
     }
 
-    const newproduct = await products.create({
+    const NewProduct = await products.create({
       Title,
       Category,
+      Sub_Category,
       Image,
+      Images,
       Description,
       price,
       Quantity,
     });
     
-    res.status(200).json({ NEWProduct: newproduct});
+    res.status(200).json({ NEWProduct: NewProduct});
   } catch (error) {
-    res.status(500).json("Something went worng...");
+    res.status(500).json("Something went Wrong...");
   }
 };
 
 export const Updateproduct = async (req, res) => {
     const { _id } = req.body;
-    const { Title, Category, Image, Description, price, Quantity } = req.body;
+    const { Title, Category, Sub_Category, Image, Images, Description, price, Quantity } = req.body;
   
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       return res.status(404).send("Product unavailable...");
@@ -58,7 +60,7 @@ export const Updateproduct = async (req, res) => {
     try {
       const updatedProduct = await products.findByIdAndUpdate(
         _id,
-        { $set: {Title:Title, Category:Category, Image:Image, Description:Description, price:price, Quantity:Quantity } },
+        { $set: {Title:Title, Category:Category, Sub_Category:Sub_Category, Image:Image, Images:Images, Description:Description, price:price, Quantity:Quantity } },
         { new: true }
       );
       res.status(200).json(updatedProduct);
