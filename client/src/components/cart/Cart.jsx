@@ -78,11 +78,11 @@ const Cart = ({ isClose, isOpen }) => {
   
   const CheckOut=()=>{
     if(user){
-      //redirect to checkout page
-      navigator('/checkout');
+      navigator('/checkout ');
+      isClose();
     }else{
-      //redirect to login page
       navigator('/login');
+      isClose();
     }
   }
   
@@ -107,11 +107,7 @@ const Cart = ({ isClose, isOpen }) => {
         <h2 className=" text-2xl lap:text-lg">
           Your Shopping Cart ({user ? cartItems.length : guestCart.length})
         </h2>
-        <button
-          onClick={() => isClose()}
-          aria-label="close-cart-button"
-          className="text-4xl"
-        >
+        <button onClick={() => isClose()} aria-label="close-cart-button" className="text-4xl" >
           <TbArrowNarrowRight />
         </button>
       </div>
