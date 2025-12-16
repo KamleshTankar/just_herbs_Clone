@@ -6,6 +6,7 @@ import { Getallproducts, Addproduct, Updateproduct, Deleteproduct } from "../con
 
 import { getAllOrders, viewOrderById, updateOrderStatus, deleteOrder } from "../controlers/Admin/Oderscontroler.js";
 
+import { upload } from "../middlewares/upload/upload.middlewares.js";
 // import auth from "../middlewares/Authmiddle.js";
 
 const router = express.Router();
@@ -16,7 +17,7 @@ router.get("/getAllUsers", getAllUsers);
 router.delete("/removeuser/:id", RemoveUser);
 
 router.get("/Getallproducts", Getallproducts);
-router.post("/Addproduct", Addproduct);
+router.post("/Addproduct", upload.fields([{ name:"image", maxCount:1},{name:"images", maxCount:7}]), Addproduct);
 router.patch("/Updateproduct", Updateproduct);
 router.delete("/Deleteproduct", Deleteproduct);
 

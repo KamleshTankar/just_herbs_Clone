@@ -141,3 +141,47 @@ export const getAllCarts = async (req, res) => {
   }
 };
 
+export const addReview = async (req, res) => {
+  try {
+    const { rating, comment, title, photos } = req.body;
+    const product = await Product.findById(req.params.id);
+
+    if (!product)
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
+
+    // prevent duplicate review
+    const alreadyReviewed = product.reviews.find(
+      (r) => r.user.toString() === req.user.id
+    );
+
+    if (alreadyReviewed)
+      return res
+        .status(400)
+        .json({ success: false, message: "Already reviewed" });
+
+    const review = {
+      user: req.user.id,
+      rating,
+      comment,
+      title,
+      photos,
+    };
+
+    product.reviews.push(review);
+
+    // update ratings
+    product.ratings.count = product.reviews.length;
+    product.ratings.average =
+      product.reviews.reduce((acc, item) => acc + item.rating, 0) /
+      product.reviews.length;
+
+    await product.save();
+
+    res.status(201).json({ success: true, message: "Review added" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+

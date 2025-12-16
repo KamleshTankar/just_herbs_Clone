@@ -15,6 +15,8 @@ const Singleproduct = () => {
   const { user } = useSelector((state) => state.User);
   
   const { id } = useParams();
+
+  console.log(products);
   
   useEffect(() => {
     const FetchProducts = async () => {
