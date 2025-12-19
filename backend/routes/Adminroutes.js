@@ -17,7 +17,7 @@ router.get("/getAllUsers", getAllUsers);
 router.delete("/removeuser/:id", RemoveUser);
 
 router.get("/Getallproducts", Getallproducts);
-router.post("/Addproduct", upload.fields([{ name:"image", maxCount:1},{name:"images", maxCount:7}]), Addproduct);
+router.post("/Addproduct", upload.fields([{name:"images", maxCount:7}]), Addproduct);
 router.patch("/Updateproduct", Updateproduct);
 router.delete("/Deleteproduct", Deleteproduct);
 

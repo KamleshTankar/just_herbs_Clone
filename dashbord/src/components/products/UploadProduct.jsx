@@ -12,14 +12,15 @@ const UploadProduct = () => {
     subCategory: '',
     price: '',
     quantity: '',
-    description: '',
+    description: {},
     size: '',
-    tags: '',
+    tags: [],
     dimensions: '',
     weight: '',
     images: []
   });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);  
   
   const handleChange =useCallback((e) => {
       const { name, value } = e.target;
@@ -55,6 +56,7 @@ const UploadProduct = () => {
   
   const AddProduct = useCallback((e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (!validate()) return;
     
@@ -89,6 +91,7 @@ const UploadProduct = () => {
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
               <label htmlFor="category"> Category</label>
               <input
                 name="category"
@@ -96,72 +99,68 @@ const UploadProduct = () => {
                 value={Product.category}
                 onChange={handleChange}
                 className="input"
-              />
+                />
+                </div>
 
+              <div>
               <label htmlFor="subCategory"> Sub Category</label>
               <input
-                name="subCategory"
+                name="subCategory" id='subCategory'
                 placeholder="Sub Category"
                 value={Product.subCategory}
                 onChange={handleChange}
                 className="input"
-              />
+                />
+                </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
+              <div>
+              <label htmlFor="quantity">Quantity</label>
               <input
-                type="number"
-                name="quantity"
+                type="number" name="quantity" id='quantity'
                 placeholder="Stock"
                 min={0}
                 value={Product.quantity}
                 onChange={handleChange}
                 className="input"
-              />
+                />
+              </div>
 
+              <div>
+              <label htmlFor="price">Price</label>
               <input
-                type="number"
-                name="price"
-                placeholder="Price"
-                min={0}
-                value={Product.price}
-                onChange={handleChange}
-                className="input"
-              />
+                type="number" id='price' name="price" placeholder="Price" min={0}
+                value={Product.price} onChange={handleChange} className="input" />
+              </div>
             </div>
 
-            <div className="grid grid-cols-5 gap-3">
-              <input
-                name="size"
-                placeholder="Size"
-                value={Product.size}
-                onChange={handleChange}
-                className="input col-span-2"
-              />
-              <input
-                name="tags"
-                placeholder="Tags (comma separated)"
-                value={Product.tags}
-                onChange={handleChange}
-                className="input col-span-3"
-              />
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+              <label htmlFor="size"> Size</label>
+              <input name="size" id='size' placeholder="Size" value={Product.size}
+                onChange={handleChange} className="input col-span-2" />
+              </div>
+
+              <div>
+              <label htmlFor="tags"> Tags</label>
+                <input name="tags" id='tags' placeholder="Tags (comma separated)"
+                value={Product.tags} onChange={handleChange} className="input col-span-3" />
+              </div>
             </div>
 
-            <div className="grid grid-cols-5 gap-3">
-              <input
-                name="dimensions"
-                placeholder="Dimensions"
-                value={Product.dimensions}
-                onChange={handleChange}
-                className="input col-span-3"
-              />
-              <input
-                name="weight"
-                placeholder="Weight"
-                value={Product.weight}
-                onChange={handleChange}
-                className="input col-span-2"
-              />
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="dimensions"> Dimensions</label>
+              <input name="dimensions" placeholder="Dimensions" value={Product.dimensions}
+                onChange={handleChange} id='dimensions' className="input col-span-3" />
+              </div>
+
+              <div>
+                <label htmlFor="weight"> Weight</label>
+              <input name="weight" placeholder="Weight" value={Product.weight}
+                onChange={handleChange} id='weight' className="input col-span-2" />
+              </div>
             </div>
           </div>
         </section>
@@ -185,9 +184,9 @@ const UploadProduct = () => {
           <button
             type="submit"
             aria-label="upload the product and view"
-            className=" w-full h-12 px-4 py-1 bg-blue-400 flex items-center justify-center gap-2"
+            className=" w-full h-12 mt-3 px-4 py-1 bg-blue-400 flex items-center justify-center gap-2"
           >
-            <FaCloudUploadAlt /> PUBLISH AND VIEW
+          {loading ? "loading":<FaCloudUploadAlt /> 'PUBLISH AND VIEW'}
           </button>
         </section>
       </form>

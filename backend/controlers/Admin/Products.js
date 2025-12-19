@@ -25,43 +25,48 @@ export const Getallproducts = async (req, res) => {
 };
 
 export const Addproduct = async (req, res) => {
-  let { title, category, subCategory, description, price, quantity, size, tags, dimensions, weight } = req.body;
+  const { title, category, subCategory, description, price, stock, size, tags, dimensions, weight } = req.body;
   try {
+    if (!title || !category || price === undefined) {
+          return res.status(400).json({
+            message: "Title, category, and price are required",
+          });
+    }
+    
     const ExistingProduct = await products.findOne({ title });
     if (ExistingProduct) {
       return res.status(409).json({ message: "Product already Exist." });
     }
 
-    let image = null;
-        if (req.files?.image) {
-          image = `/uploads/${req.files.image[0].filename}`;
-        }
 
-    let images = [];
-        if (req.files?.images) {
-          images = req.files.images.map(
-            (file) => `/uploads/${file.filename}`
-          );
-        }
+    // let images = [];
+    //     if (req.files?.images) {
+    //       images = req.files.images.map(
+    //         (file) => `/uploads/${file.filename}`
+    //       );
+    // }
+    
+    const images = req.files
+      ? req.files.map((file) => `/uploads/${file.filename}`)
+        : [];
 
-    let NewProduct = await products.create({
+    const NewProduct = await products.create({
       title,
       category,
       subCategory,
-      image,
       images,
       description,
       price,
-      quantity,
+      stock,
       size,
       tags,
       dimensions,
       weight,
     });
     
-    res.status(200).json({ NEWProduct: NewProduct});
+    res.status(201).json({ NEWProduct: NewProduct});
   } catch (error) {
-    res.status(500).json("Something went Wrong...");
+    res.status(500).json({ message:error.message });
   }
 };
 
