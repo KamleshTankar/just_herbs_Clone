@@ -25,7 +25,7 @@ export const Getallproducts = async (req, res) => {
 };
 
 export const Addproduct = async (req, res) => {
-  const { title, category, subCategory, description, price, stock, size, tags, dimensions, weight } = req.body;
+  const { title, category, subCategory, description, price, stock, size, weight } = req.body;
   try {
     if (!title || !category || price === undefined) {
           return res.status(400).json({
@@ -59,8 +59,6 @@ export const Addproduct = async (req, res) => {
       price,
       stock,
       size,
-      tags,
-      dimensions,
       weight,
     });
     

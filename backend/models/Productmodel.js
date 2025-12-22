@@ -40,8 +40,6 @@ const productSchema = mongoose.Schema({
   price: { type: Number, required: true, min: 0 },
   stock: { type: Number, default: 10, min: 0 },
   size: [{ type: String }],
-  tags: [{ type: String, lowercase: true, trim: true }],
-  dimensions: { length: { type: Number }, width: { type: Number }, height: { type: Number }, unit: { type: String, default: "cm" } },
   weight: { value: { type: Number }, unit: { type: String, default: "kg" } },
   ratings: { average: { type: Number, default: 0, min: 0, max: 5 }, count: { type: Number, default: 0 } },
   reviews: [reviewSchema],

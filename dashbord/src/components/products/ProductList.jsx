@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getallproduct } from "../../redux-toolkit/Slice/ProductSlice";
+import { GetallProduct } from "../../redux-toolkit/Slice/ProductSlice";
 
 import Skeleton from "react-loading-skeleton";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
@@ -71,7 +71,7 @@ const ProductList = () => {
 
   useEffect(() => {
         FeatchProducts();
-        dispatch(getallproduct());
+        dispatch(GetallProduct());
     },[dispatch]);
   
     if (error) return <SkeletonLoading/>;

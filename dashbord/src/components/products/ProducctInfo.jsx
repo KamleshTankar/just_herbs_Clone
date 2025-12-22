@@ -2,7 +2,7 @@ import React,{useEffect} from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from 'react-router';
 
-import { getallproduct } from "../../redux-toolkit/Slice/ProductSlice";
+import { GetallProduct } from "../../redux-toolkit/Slice/ProductSlice";
 
 import { TiArrowBackOutline } from "react-icons/ti";
 import Banner from '../Banner'
@@ -19,7 +19,7 @@ const ProducctInfo = () => {
   const {Image, Category, Description, Title, price, Quntity } = singleproduct[0];
 
     useEffect(() => {
-          dispatch(getallproduct());
+          dispatch(GetallProduct());
       },[dispatch]);
   
   return (

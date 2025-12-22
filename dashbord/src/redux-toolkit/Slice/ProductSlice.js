@@ -1,22 +1,28 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API_URL from "../../Api/Api";
 
-export const getallproduct = createAsyncThunk("getallproducts", async () => {
+export const GetallProduct = createAsyncThunk("product/GetallProducts", async () => {
   const response = await API_URL.get("/admin/Getallproducts");
   return response.data;
 });
 
-export const addproduct = createAsyncThunk('addproduct', async (productdata) => {
-  const response = await API_URL.post('/admin/Addproduct', productdata);
+export const AddProduct = createAsyncThunk('product/AddProduct',
+  async(productData, { rejectWithValue }) => {
+  try {    
+    const response = await API_URL.post('/admin/Addproduct', productData,
+      { headers: { "Content-type": "multipart/form-data" }, });
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response?.data?.message || "Failed to add product");
+  }
+});
+
+export const UpdateProduct = createAsyncThunk('product/UpdateProduct', async (productData) => {
+  const response = await API_URL.patch('/admin/Addproduct',productData);
   return response.data;
 });
 
-export const updateproduct = createAsyncThunk('admin/addproduct', async (productdata) => {
-  const response = await API_URL.patch('/admin/Addproduct',productdata);
-  return response.data;
-});
-
-export const deleteproduct = createAsyncThunk('admin/deleteproduct', async () => {
+export const DeleteProduct = createAsyncThunk('product/DeleteProduct', async () => {
   const response = await API_URL.delete('/admin/Deleteproduct');
   return response.data;
 });
@@ -28,67 +34,72 @@ export const ProductSlice = createSlice({
     product: [],
     loading: false,
     error: null,
-    status:'idel',
+    status: "idle",
   },
-  reducers: { },
+  reducers: {
+    resetProductState: (state) => {
+      state.loading = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(getallproduct.pending, (state) => {
+      .addCase(GetallProduct.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.status = "loading";
       })
-      .addCase(getallproduct.fulfilled, (state, action) => {
+      .addCase(GetallProduct.fulfilled, (state, action) => {
         state.loading = false;
         state.product = action.payload;
-        state.status = "successsed";
+        state.status = "success";
       })
-      .addCase(getallproduct.rejected, (state, action) => {
+      .addCase(GetallProduct.rejected, (state, action) => {
         state.loading = false;
         state.status = "failed";
         state.error = action.error.message;
       })
-      .addCase(addproduct.pending, (state) => {
+      .addCase(AddProduct.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.status = "loading";
       })
-      .addCase(addproduct.fulfilled, (state, action) => {
+      .addCase(AddProduct.fulfilled, (state, action) => {
         state.loading = false;
         state.product = action.payload;
-        state.status = "successsed";
+        state.status = "success";
       })
-      .addCase(addproduct.rejected, (state, action) => {
+      .addCase(AddProduct.rejected, (state, action) => {
         state.loading = false;
         state.status = "failed";
         state.error = action.error.message;
       })
-      .addCase(updateproduct.pending, (state) => { 
+      .addCase(UpdateProduct.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.status = "loading";
       })
-      .addCase(updateproduct.fulfilled, (state, action) => {
+      .addCase(UpdateProduct.fulfilled, (state, action) => {
         state.loading = false;
         state.product = action.payload;
-        state.status = "successed";
+        state.status = "success";
       })
-      .addCase(updateproduct.rejected, (state, action) => {
+      .addCase(UpdateProduct.rejected, (state, action) => {
         state.loading = false;
         state.status = "failed";
         state.error = action.error.message;
       })
-      .addCase(deleteproduct.pending, (state) => { 
+      .addCase(DeleteProduct.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.status = "loading";
       })
-      .addCase(deleteproduct.fulfilled, (state, action) => {
+      .addCase(DeleteProduct.fulfilled, (state, action) => {
         state.loading = false;
         state.product = action.payload;
-        state.status = "successed";
+        state.status = "success";
       })
-      .addCase(deleteproduct.rejected, (state, action) => {
+      .addCase(DeleteProduct.rejected, (state, action) => {
         state.loading = false;
         state.status = "failed";
         state.error = action.error.message;
@@ -96,4 +107,5 @@ export const ProductSlice = createSlice({
   },
 });
 
+export const { resetProductState } = ProductSlice.actions;
 export default ProductSlice.reducer;

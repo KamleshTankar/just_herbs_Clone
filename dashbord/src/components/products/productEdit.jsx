@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
 
-import { getallproduct } from "../../redux-toolkit/Slice/ProductSlice";
+import { GetallProduct } from "../../redux-toolkit/Slice/ProductSlice";
 
 import { FaCloudUploadAlt, FaRegStar } from "react-icons/fa";
 import Banner from "../Banner";
@@ -24,7 +24,7 @@ const Editproduct = () => {
     const { Description, Title, price, Quntity } = singleproduct[0];
 
     useEffect(() => {
-      dispatch(getallproduct());
+      dispatch(GetallProduct());
     }, [dispatch]);
     
     const UpdateProduct = (e) => {
