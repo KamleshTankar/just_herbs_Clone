@@ -25,6 +25,7 @@ const AllRoutes = () => {
       <Route exact path="users" element={<Users />} />
       <Route exact path="transactions" element={<Transactions />} />
       <Route exact path="charts" element={<Charts />} />
+      
       <Route exact path="signup" element={<Signup />} />
       <Route exact path="login" element={<Login />} />
     </Routes>

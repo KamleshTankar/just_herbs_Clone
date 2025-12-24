@@ -9,12 +9,12 @@ export const Getallproducts = async (req, res) => {
         allProducts.forEach((product) => {
           allProductDetails.push({
             _id: product._id,
-            Title: product.Title,
-            Category: product.Category,
-            Image:product.Image,
+            title: product.title,
+            category: product.category,
+            image:product.image,
             price: product.price,
-            Description: product.Description,
-            Quantity: product.Quantity,
+            description: product.description,
+            quantity: product.quantity,
             joinedOn: product.updatedOn,
           });
         });
@@ -26,6 +26,8 @@ export const Getallproducts = async (req, res) => {
 
 export const Addproduct = async (req, res) => {
   const { title, category, subCategory, description, price, stock, size, weight } = req.body;
+  const pData = { title, category, subCategory, description, price, stock, size, weight };
+  console.log(pData);
   try {
     if (!title || !category || price === undefined) {
           return res.status(400).json({

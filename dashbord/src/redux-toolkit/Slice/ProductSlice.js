@@ -7,7 +7,8 @@ export const GetallProduct = createAsyncThunk("product/GetallProducts", async ()
 });
 
 export const AddProduct = createAsyncThunk('product/AddProduct',
-  async(productData, { rejectWithValue }) => {
+  async (productData, { rejectWithValue }) => {
+    console.log(productData);
   try {    
     const response = await API_URL.post('/admin/Addproduct', productData,
       { headers: { "Content-type": "multipart/form-data" }, });

@@ -1,11 +1,12 @@
-import React, { useState, useCallback } from 'react'
-// import { useDispatch, useSelector } from "react-redux";
-// import { addProduct, resetProductState } from "../../redux-toolkit/Slice/ProductSlice";
+import React, { useState, useEffect, useCallback } from 'react'
+import { useDispatch, useSelector } from "react-redux";
+import { AddProduct, resetProductState } from "../../redux-toolkit/Slice/ProductSlice";
 
 import { FaCloudUploadAlt, FaTruckLoading } from "react-icons/fa";
 
 import Banner from '../Banner'
 import DragDropUpload from "./DragDropUploads";
+import { useNavigate } from 'react-router';
 
 const UploadProduct = () => {
   const [Product, setProducts] = useState({
@@ -22,28 +23,30 @@ const UploadProduct = () => {
   const [sizeInput, setSizeInput] = useState("");
   const [loading, setLoading] = useState(false);  
 
-    // const dispatch = useDispatch();
-    // const { loading, success, error } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
+  const navigator = useNavigate();
+  const { success } = useSelector((state) => state.Product);
+  const { user } = useSelector((state) => state.Auth);
   
-  //  useEffect(() => {
-  //    if (success) {
-  //      setProducts({
-  //        title: "",
-  //        category: "",
-  //        subCategory: "",
-  //        description: "",
-  //        price: "",
-  //        stock: "",
-  //        size: "",
-  //        tags: [],
-  //        dimensions: {},
-  //        weight: "",
-  //        images:[]
-  //      });
+   useEffect(() => {
+     if (success) {
+       setProducts({
+         title: "",
+         category: "",
+         subCategory: "",
+         description: "",
+         price: "",
+         stock: "",
+         size: "",
+         tags: [],
+         dimensions: {},
+         weight: "",
+         images:[]
+       });
 
-  //      setTimeout(() => dispatch(resetProductState()), 2000);
-  //    }
-  //  }, [success, dispatch]);
+       setTimeout(() => dispatch(resetProductState()), 2000);
+     }
+   }, [success, dispatch]);
   
   const handleSizeKeyDown = (e) => {
     if (e.key === "Enter" && sizeInput.trim()) {
@@ -71,40 +74,29 @@ const UploadProduct = () => {
   const handleChange =useCallback((e) => {
       const { name, value } = e.target;
     setProducts((prev) => ({ ...prev, [name]: value }));
-    // setProducts((prev) => ({...prev, size:[...prev.size, ...e.target.value]}));
     },[]);
-
-  // const handleImage = (e) => {
-  //     setProducts((prev) => ({
-  //       ...prev,
-  //       images: [...prev.images, ...e.target.files],
-  //     }));
-  //   };
-
-
   
-  const AddProduct = useCallback((e) => {
+  const NewProduct = useCallback((e) => {
     e.preventDefault();
     setLoading(true);
-    
-    // const data = new ProductData();
-    // Object.entries(Product).forEach(([key, value]) => data.append(key, value));
-    
-    // for (let i = 0; i < images.length; i++) {
-    //   data.append("images", images[i]);
-    // }
 
-    // dispatch(addProduct(data));
-          setTimeout(() => {
-            console.log("Submitted product:", Product);
-            setLoading(false);
-          }, 1000);
-  },[Product]);
+    // console.log("Submitted product:", Product);
+    if (user) {
+        setTimeout(() => {
+        dispatch(AddProduct(Product));
+        setLoading(false);
+      }, 1000);
+    } else {
+      setTimeout(() => {
+        navigator("/login");
+      }, 500);
+      }
+  },[Product, user, navigator, dispatch]);
 
   return (
     <>
       <Banner page={"Upload Product"} />
-      <form onSubmit={AddProduct} className="py-6 space-y-4">
+      <form onSubmit={NewProduct} className="py-6 space-y-4">
         <section className="w-[96%] mx-auto bg-white rounded-lg p-4 shadow">
           <h2 className="text-xl font-semibold mb-4">Basic Information</h2>
 
@@ -151,7 +143,7 @@ const UploadProduct = () => {
               <div>
               <label htmlFor="size"> Size</label>
               <input name="size" id='size' placeholder="Size" value={sizeInput}
-                  onChange={(e) => { setSizeInput(e.target.value) }} onKeyDown={handleSizeKeyDown} className="input col-span-2" required />
+                  onChange={(e) => { setSizeInput(e.target.value) }} onKeyDown={handleSizeKeyDown} className="input col-span-2" />
                 
                 <div className="flex flex-wrap gap-2 mt-2">
                 {Product.size.map((s) => (
