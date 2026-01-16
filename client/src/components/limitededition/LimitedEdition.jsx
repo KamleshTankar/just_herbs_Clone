@@ -22,7 +22,7 @@ const LimitedEdition = () => {
     } catch (error) {
       if (error.name !== 'AbortError') {
         setError("Unable to load the product. Please try again later.",error.message);
-        console.error("Failed to fetch products:", error);
+        // console.error("Failed to fetch products:", error);
       }
     } finally {
       setLoading(false);

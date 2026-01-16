@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { AddProduct, resetProductState } from "../../redux-toolkit/Slice/ProductSlice";
+import { resetProductState } from "../../redux-toolkit/Slice/ProductSlice";
 
 import { FaCloudUploadAlt, FaTruckLoading } from "react-icons/fa";
 
 import Banner from '../Banner'
 import DragDropUpload from "./DragDropUploads";
-import { useNavigate } from 'react-router';
+// import { useNavigate } from 'react-router';
 
 const UploadProduct = () => {
   const [Product, setProducts] = useState({
@@ -24,9 +24,9 @@ const UploadProduct = () => {
   const [loading, setLoading] = useState(false);  
 
   const dispatch = useDispatch();
-  const navigator = useNavigate();
+  // const navigator = useNavigate();
   const { success } = useSelector((state) => state.Product);
-  const { user } = useSelector((state) => state.Auth);
+  // const { user } = useSelector((state) => state.Auth);
   
    useEffect(() => {
      if (success) {
@@ -80,18 +80,18 @@ const UploadProduct = () => {
     e.preventDefault();
     setLoading(true);
 
-    // console.log("Submitted product:", Product);
-    if (user) {
-        setTimeout(() => {
-        dispatch(AddProduct(Product));
-        setLoading(false);
-      }, 1000);
-    } else {
-      setTimeout(() => {
-        navigator("/login");
-      }, 500);
-      }
-  },[Product, user, navigator, dispatch]);
+    console.log("Submitted product:", Product);
+    // if (user) {
+    //     setTimeout(() => {
+    //     dispatch(AddProduct(Product));
+    //     setLoading(false);
+    //   }, 1000);
+    // } else {
+    //   setTimeout(() => {
+    //     navigator("/login");
+    //   }, 500);
+    //   }
+  },[Product,]);
 
   return (
     <>
