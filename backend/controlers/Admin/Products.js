@@ -26,6 +26,7 @@ export const Getallproducts = async (req, res) => {
 
 export const Addproduct = async (req, res) => {
   const { title, category, subCategory, description, price, stock, size, weight } = req.body;
+  const imagePath = req.file.path;
   const pData = { title, category, subCategory, description, price, stock, size, weight };
   console.log(pData);
   try {
@@ -40,23 +41,11 @@ export const Addproduct = async (req, res) => {
       return res.status(409).json({ message: "Product already Exist." });
     }
 
-
-    // let images = [];
-    //     if (req.files?.images) {
-    //       images = req.files.images.map(
-    //         (file) => `/uploads/${file.filename}`
-    //       );
-    // }
-    
-    const images = req.files
-      ? req.files.map((file) => `/uploads/${file.filename}`)
-        : [];
-
     const NewProduct = await products.create({
       title,
       category,
       subCategory,
-      images,
+      image: imagePath,
       description,
       price,
       stock,
