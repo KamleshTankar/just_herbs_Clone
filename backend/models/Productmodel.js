@@ -40,7 +40,7 @@ const productSchema = mongoose.Schema({
   price: { type: Number, required: true, min: 0 },
   stock: { type: Number, default: 10, min: 0 },
   size: [{ type: String }],
-  weight: { value: { type: Number }, unit: { type: String, default: "kg" } },
+  weight: { type: String },
   ratings: { average: { type: Number, default: 0, min: 0, max: 5 }, count: { type: Number, default: 0 } },
   reviews: [reviewSchema],
   isActive: { type: Boolean, default: true },

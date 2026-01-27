@@ -25,10 +25,11 @@ export const Getallproducts = async (req, res) => {
 };
 
 export const Addproduct = async (req, res) => {
-  const { title, category, subCategory, description, price, stock, size, weight } = req.body;
+  const { title, category, subCategory, description,
+    price, stock, size, weight } = req.body;
+  
   const imagePath = req.file.path;
-  const pData = { title, category, subCategory, description, price, stock, size, weight };
-  console.log(pData);
+
   try {
     if (!title || !category || price === undefined) {
           return res.status(400).json({
@@ -45,7 +46,7 @@ export const Addproduct = async (req, res) => {
       title,
       category,
       subCategory,
-      image: imagePath,
+      images: imagePath,
       description,
       price,
       stock,
