@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { GetallProduct } from "../../redux-toolkit/Slice/ProductSlice";
+import { GetallProduct } from "../../../redux-toolkit/Slice/ProductSlice";
 
 import Skeleton from "react-loading-skeleton";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
 
-import Banner from "../Banner";
+import Banner from "../../Banner";
 import Products from "./Product";
 
 const ProductList = () => {

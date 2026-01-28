@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
 
-import { GetallProduct } from "../../redux-toolkit/Slice/ProductSlice";
+import { GetallProduct } from "../../../redux-toolkit/Slice/ProductSlice";
 
 import { FaCloudUploadAlt, FaRegStar } from "react-icons/fa";
-import Banner from "../Banner";
+import Banner from "../../Banner";
 
 const Editproduct = () => {
     const [ptitle, setPTitle] = useState("");
@@ -13,6 +13,16 @@ const Editproduct = () => {
     const [pdescription, setPDescription] = useState("");
     const [pprice, setPPrice] = useState("");
     const [pquantity, setPQuantity] = useState("");
+    // const [Product, setProducts] = useState({
+    //   title: '',
+    //   category: '',
+    //   subCategory: '',
+    //   price: '',
+    //   quantity: '',
+    //   description: '',
+    //   size: [],
+    //   weight: '',
+    // });
   
     const dispatch = useDispatch();
     const { product } = useSelector((state) => state.Product);

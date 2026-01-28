@@ -18,7 +18,7 @@ router.delete("/removeuser/:id", RemoveUser);
 
 router.get("/Getallproducts", Getallproducts);
 router.post("/Addproduct", upload.single("image"), Addproduct);
-router.patch("/Updateproduct", Updateproduct);
+router.patch("/Updateproduct", upload.single("images"), Updateproduct);
 router.delete("/Deleteproduct", Deleteproduct);
 
 router.get("/allorders", getAllOrders);

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { resetProductState, AddProduct } from "../../redux-toolkit/Slice/ProductSlice";
+import { resetProductState, AddProduct } from "../../../redux-toolkit/Slice/ProductSlice";
 
 import { FaCloudUploadAlt, FaTruckLoading } from "react-icons/fa";
 
-import Banner from '../Banner'
+import Banner from '../../Banner'
 import DragDropUpload from "./DragDropUploads";
 // import { useNavigate } from 'react-router';
 
@@ -16,7 +16,7 @@ const UploadProduct = () => {
     category: '',
     subCategory: '',
     price: '',
-    quantity: '',
+    stock: '',
     description: '',
     size: [],
     weight: '',
@@ -91,7 +91,7 @@ const UploadProduct = () => {
       formdata.append("category", Product.category);
       formdata.append("subCategory", Product.subCategory);
       formdata.append("price", Product.price);
-      formdata.append("quantity", Product.quantity);
+      formdata.append("stock", Product.stock);
       formdata.append("description", Product.description);
       Product.size.forEach((size) => formdata.append("size[]", size));
       formdata.append("weight", Product.weight);
@@ -149,9 +149,9 @@ const UploadProduct = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-              <label htmlFor="quantity">Quantity</label>
-              <input type="number" name="quantity" id='quantity'
-                  placeholder="Stock" min={0} value={Product.quantity}
+              <label htmlFor="stock">Stock</label>
+              <input type="number" name="stock" id='stock'
+                  placeholder="Stock" min={0} value={Product.stock}
                   onChange={handleChange} className="input" required />
               </div>
 

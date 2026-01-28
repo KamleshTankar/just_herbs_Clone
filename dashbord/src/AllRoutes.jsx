@@ -2,10 +2,10 @@ import React from 'react'
 import { Routes, Route } from "react-router";
 
 import Dashbord from "./pages/Dashbord";
-import ProductsList from "./components/products/ProductList";
+import ProductsList from "./components/products/AllProduct/ProductList";
 import ProductInfo from "./components/products/ProducctInfo";
-import EditProduct from './components/products/productEdit';
-import UploadProduct from "./components/products/UploadProduct";
+import EditProduct from './components/products/ProductUpdate/productEdit';
+import UploadProduct from "./components/products/NewProduct/UploadProduct";
 import Orders from "./pages/Oders";
 import Users from "./pages/Users";
 import Transactions from "./pages/Transactions";

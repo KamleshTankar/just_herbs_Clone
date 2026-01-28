@@ -11,8 +11,12 @@ export const Getallproducts = async (req, res) => {
             _id: product._id,
             title: product.title,
             category: product.category,
-            image:product.image,
+            subCategory: product.subCategory,
+            image:[product.images],
             price: product.price,
+            weight: product.weight,
+            stock: product.stock,
+            size: product.size,
             description: product.description,
             quantity: product.quantity,
             joinedOn: product.updatedOn,
@@ -25,7 +29,7 @@ export const Getallproducts = async (req, res) => {
 };
 
 export const Addproduct = async (req, res) => {
-  const { title, category, subCategory, description,
+  const { title, category, subCategory, description, 
     price, stock, size, weight } = req.body;
   
   const imagePath = req.file.path;

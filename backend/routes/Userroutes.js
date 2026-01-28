@@ -10,14 +10,15 @@ import { Getallproducts } from "../controlers/Admin/Products.js";
 import { createOrder, getMyOrders } from "../controlers/User/Odercontroler.js";
 
 import auth from "../middlewares/Authmiddle.js";
+import { upload } from "../middlewares/upload/upload.middlewares.js";
 
 
 const router = express.Router();
 
 
-router.post("/signup", signup);
+router.post("/signup", upload.single('Avatar') ,signup);
 router.post("/login", login);
-router.patch("/updateprofile/:id", updateProfile);
+router.patch("/updateprofile/:id", upload.single('Avatar'),updateProfile);
 
 router.get("/Getallproducts", Getallproducts);
 
