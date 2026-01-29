@@ -4,7 +4,7 @@ import { FaEye, FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Link } from "react-router";
 
 const Products = ({ Prod }) => {
-console.log(Prod);
+console.log(Prod.image[0]);
   const { _id, title, price, stock, category } = Prod;
   const porductID = _id.slice(20);
   const handelDelete = () => {
@@ -13,6 +13,7 @@ console.log(Prod);
   
   return (
     <>
+      <h1> {URL.parse(Prod.image[0])}</h1>
       <table className="w-full h-auto">
         <tbody>
           <tr className="h-24 grid grid-cols-7 gap-6 items-center border-b-2 hover:border-black">

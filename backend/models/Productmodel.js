@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -32,8 +33,8 @@ const reviewSchema = new mongoose.Schema(
 
 const productSchema = mongoose.Schema({
   title: { type: String, required: true, trim: true, unique: true, maxlength: 150 },
-  category: { type: String, required: true, index: true },
-  subCategory: { type: String, index: true },
+  category: { type: String, required: true },
+  subCategory: { type: String, required:true },
   images: { type: String },
   description: { type: String, trim: true },
   price: { type: Number, required: true, min: 0 },
@@ -43,6 +44,7 @@ const productSchema = mongoose.Schema({
   ratings: { average: { type: Number, default: 0, min: 0, max: 5 }, count: { type: Number, default: 0 } },
   reviews: [reviewSchema],
   isActive: { type: Boolean, default: true },
+  slug: { type: String, required: true, unique: true }
 },
   { timestamps: true}
 );
@@ -69,6 +71,13 @@ productSchema.pre("save", function (next) {
   this.ratings.count = count;
   this.ratings.average = Number(average.toFixed(1));
 
+  next();
+});
+
+productSchema.pre("validate", function (next) {
+  if (!this.slug && this.title) {
+    this.slug = slugify(this.title, { lower: true, strict: true });
+  }
   next();
 });
 

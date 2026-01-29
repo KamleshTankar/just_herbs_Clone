@@ -32,9 +32,14 @@ export const Addproduct = async (req, res) => {
   const { title, category, subCategory, description, 
     price, stock, size, weight } = req.body;
   
-  const imagePath = req.file.path;
+  // const imagePath = req.file.path;
 
   try {
+    let imagePath;
+    if (req.file) {
+      imagePath = req.file.path;
+    }
+
     if (!title || !category || price === undefined) {
           return res.status(400).json({
             message: "Title, category, and price are required",
@@ -58,8 +63,9 @@ export const Addproduct = async (req, res) => {
       weight,
     });
     
-    res.status(201).json({ NEWProduct: NewProduct});
+    res.status(201).json({ newProduct: NewProduct});
   } catch (error) {
+    console.error("AddProduct error:", error);
     res.status(500).json({ message:error.message });
   }
 };
