@@ -19,7 +19,7 @@ function App() {
     <SkeletonTheme baseColor="#76b5c5">
     <Router>
         <Navbar isOpen={isopen} setIsOpen={setIsOpen} />
-      <div className=' relative bg-gray-200'>
+      <div className='relative bg-gray-200'>
         <SideMenu isOpen={isopen} isClose={isClose}/>
         <AllRoutes />
       </div>

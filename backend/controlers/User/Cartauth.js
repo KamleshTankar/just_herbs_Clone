@@ -20,7 +20,7 @@ export const addproduct = async (req, res) => {
             const image = Data.Image; // Assuming Image is the image of the product
             const Category = Data.Category; // Assuming Image is the image of the product
     
-    const cartIndex = user.cartItems.findIndex((p) => p.productid.toString() === productId);
+    const cartIndex = user.cartItems.findIndex((p) => p.productId.toString() === productId);
 
       if (cartIndex > -1) {
         user.cartItems[cartIndex].quantity += req.body.cartItems.quantity;

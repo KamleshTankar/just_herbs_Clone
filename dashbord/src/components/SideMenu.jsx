@@ -13,7 +13,7 @@ const SideMenu = ({isOpen, isClose}) => {
   return (
     <section
       className={`${isOpen ? "-left-full" : "left-0"} 
-      " w-[25vw] h-full max-h-screen -left-full absolute -top-2 z-20 bg-red-300"`}
+      " w-[25vw] h-full -left-full absolute -top-2 z-20 bg-red-300"`}
     >
       <div className="h-full w-full bg-orange-200 px-4 pt-2">
         <h3 className=" text-2xl font-semibold p-2">Menu</h3>

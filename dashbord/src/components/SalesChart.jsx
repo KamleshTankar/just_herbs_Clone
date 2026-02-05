@@ -56,13 +56,13 @@ const SalesChart = () => {
     ];
 
   return (
-    <div className="w-[95%] h-[70vh] mx-auto mt-2 text-center">
+    <div className="w-[95%] h-auto mx-auto mt-2 text-center">
       <h3 className="text-xl font-medium">Sales Chart</h3>
       <LineChart className='mx-auto w-4/5'
         width={900}
         height={400}
         data={data}
-        margin={{ top: 5, right: 0, left: 0, bottom: 5 }}
+        margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />

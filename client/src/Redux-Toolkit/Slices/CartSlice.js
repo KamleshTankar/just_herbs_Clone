@@ -5,7 +5,6 @@ const getErrorMessage = (error) =>
   error?.response?.data?.message || error.message || "Something went wrong";
 
 export const AddToCart = createAsyncThunk("cart/add", async (Item,{rejectWithValue}) => {
-  
   try {
     const response = await API_URL.post("/user/addtocart", Item);
     return response.data;
