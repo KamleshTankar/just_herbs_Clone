@@ -11,21 +11,23 @@ export const addproduct = async (req, res) => {
       return res.status(400).json({ message: "Product ID, quantity, and user ID are required" });
     }
 
-    const user = await userslist.findOne({ _id:userId });
-
+    const user = await userslist.findOne({ _id: userId });
+    
     // ✅ Fetch prices from DB and calculate total
-            const Data = await Product.findById(productId);
-            const name = Data.Title; // Assuming Title is the name of the product
-            const price = Data.price; // Assuming price is the price of the product
-            const image = Data.Image; // Assuming Image is the image of the product
-            const Category = Data.Category; // Assuming Image is the image of the product
+    const Data = await Product.findById({ _id: productId });
+    const name = Data.title; // Assuming Title is the name of the product
+    const price = Data.price; // Assuming price is the price of the product
+    const image = Data.images; // Assuming Image is the image of the product
+    const Category = Data.category;
+    const SubCategory = Data.subCategory;
     
     const cartIndex = user.cartItems.findIndex((p) => p.productId.toString() === productId);
+    console.log(cartIndex);
 
       if (cartIndex > -1) {
         user.cartItems[cartIndex].quantity += req.body.cartItems.quantity;
       } else {
-        user.cartItems.push({ productId, name, Category, image, price, quantity });
+        user.cartItems.push({ productId, name, Category, SubCategory, image, price, quantity });
       }
 
       const updatedUser = await user.save();
@@ -45,8 +47,8 @@ export const increseQuantity = async (req, res) => {
     if (!User) {
       return res.status(404).json({ message: 'Cart not found' });
     } else {
-      const productId = req.body.productid;
-      const item = User.cartItems.findIndex(i => i.productid.toString() === productId);
+      const productId = req.body.productId;
+      const item = User.cartItems.findIndex(i => i.productId.toString() === productId);
       
       if (item > -1) {
         User.cartItems[item].quantity += 1;
@@ -69,8 +71,8 @@ export const decreseQuantity = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "user not found" });
     } else {
-      const productId = req.body.productid;
-      const cartIndex = user.cartItems.findIndex((i) => i.productid.toString() === productId);
+      const productId = req.body.productId;
+      const cartIndex = user.cartItems.findIndex((i) => i.productId.toString() === productId);
 
       if (cartIndex === -1) {
         return res.status(404).json({ message: "Product not found in cart" });
@@ -128,11 +130,12 @@ export const getAllCarts = async (req, res) => {
           return res.status(400).json({ message: "User ID is required" });
     }
     
-      const User = await userslist.findOne({ _id:userId }).populate("cartItems.productid");
+      const User = await userslist.findOne({ _id:userId }).populate("cartItems.productId");
       
         if (!User) {
           return res.status(404).json({ message: "User not found" });
     }
+    console.log(User.cartItems);
     
         res.status(200).json( User.cartItems);
         

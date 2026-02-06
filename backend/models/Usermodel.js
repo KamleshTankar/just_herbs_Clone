@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema(
     number: { type: Number },
     addresses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }],
     cartItems: [{
-        productid: { type: mongoose.Schema.Types.ObjectId, ref: "Products" },
+        product: { type: mongoose.Schema.Types.ObjectId, ref: "Products" },
         quantity: { type: Number, default: 1 },
       }],
     myorders: [{type:mongoose.Schema.Types.ObjectId, ref:"Orders"}],
