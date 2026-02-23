@@ -2,54 +2,75 @@ import React, { useCallback } from "react";
 import { FaRegImage, FaTrash } from "react-icons/fa6";
 
 const DragDropUpload = ({ image, setImage, preview, setPreview }) => {
-  // const handleFiles = useCallback(
-  //   (files) => {
-  //     const validFiles = Array.from(files).filter((file) =>
-  //       file.type.startsWith("image/")
-  //     );
+  const handleFiles = useCallback(
+    (files) => {
+      const validFiles = Array.from(files).filter((file) =>
+        file.type.startsWith("image/")
+      );
 
-  //     setImages((prev) => [...prev, ...validFiles]);
-  //   },
-  //   [setImages]
-  // );
-
-  // const onDrop = useCallback(
-  //   (e) => {
-  //     e.preventDefault();
-  //     handleFiles(e.dataTransfer.files);
-  //   },
-  //   [handleFiles]
-  // );
-
-  // const onChange = useCallback(
-  //   (e) => handleFiles(e.target.files),
-  //   [handleFiles]
-  // );
-
-  const removeImage = useCallback(() => {
-    setPreview(null);
-    setImage(null);
-  }, [setPreview, setImage]);
-
-    const handleImageChange = useCallback((e) => {
-      const file = e.target.files[0];
+            const mappedFiles = validFiles.map((file) => ({
+              file,
+              preview: URL.createObjectURL(file),
+              id: crypto.randomUUID(),
+            }));
       
-      if (!file) return;
+      setImage((prev) => [...prev, ...mappedFiles]);
+    },
+    [setImage]
+  );
 
-      setImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      }
-      reader.readAsDataURL(file);
+  const onDrop = useCallback(
+    (e) => {
+      e.preventDefault();
+      handleFiles(e.dataTransfer.files);
+    },
+    [handleFiles]
+  );
 
-    },[setImage, setPreview]);
+  const onChange = useCallback(
+    (e) => handleFiles(e.target.files),
+    [handleFiles]
+  );
+
+    const removeImage = useCallback(
+      (id) => {
+        setImage((prev) => {
+          const updated = prev.filter((img) => img.id !== id);
+
+          // Cleanup removed image preview
+          const removed = prev.find((img) => img.id === id);
+          if (removed) URL.revokeObjectURL(removed.preview);
+
+          return updated;
+        });
+      },
+      [setImage],
+    );
+
+  // const removeImage = useCallback(() => {
+  //   setPreview(null);
+  //   setImage(null);
+  // }, [setPreview, setImage]);
+  
+    // const handleImageChange = useCallback((e) => {
+    //   const file = e.target.files[0];
+      
+    //   if (!file) return;
+
+    //   setImage(file);
+    //   const reader = new FileReader();
+    //   reader.onloadend = () => {
+    //     setPreview(reader.result);
+    //   }
+    //   reader.readAsDataURL(file);
+
+    // },[setImage, setPreview]);
 
   return (
     <div className="space-y-4">
       {/* Drop Area */}
       <label
-        // onDrop={onDrop}
+        onDrop={onDrop}
         onDragOver={(e) => e.preventDefault()}
         className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-xl cursor-pointer hover:bg-gray-50 transition"
       >
@@ -61,13 +82,13 @@ const DragDropUpload = ({ image, setImage, preview, setPreview }) => {
           type="file"
           multiple
           accept="image/*"
-          onChange={handleImageChange}
+          onChange={onChange}
           className="hidden"
         />
       </label>
 
       {/* Preview Grid */}
-      {image && (
+      {/* {image && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             <div
               className="relative group border rounded-lg overflow-hidden"
@@ -87,28 +108,31 @@ const DragDropUpload = ({ image, setImage, preview, setPreview }) => {
               </button>
             </div>
         </div>
-      )}
-      {/* {images && (
+      )} */}
+      {image?.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {image.map((img) => (
             <div
+              key={img.id}
               className="relative group border rounded-lg overflow-hidden"
             >
               <img
-                src={URL.createObjectURL(images)}
+                src={img.preview}
                 alt="preview"
-                className="w-full h-auto object-cover"
+                className="w-full h-40 object-cover"
               />
 
               <button
                 type="button"
-                onClick={() => removeImage()}
+                onClick={() => removeImage(img.id)}
                 className="absolute top-2 right-2 bg-black/60 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition"
               >
                 <FaTrash size={14} />
               </button>
             </div>
+          ))}
         </div>
-      )} */}
+      )}
     </div>
   );
 };

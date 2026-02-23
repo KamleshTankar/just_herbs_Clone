@@ -9,8 +9,7 @@ import DragDropUpload from "./DragDropUploads";
 // import { useNavigate } from 'react-router';
 
 const UploadProduct = () => {
-  const [productImage, setProductImage] = useState(null);
-  const [previewImage, setPreviewImage] = useState(null);
+  const [productImage, setProductImage] = useState([]);
   const [Product, setProducts] = useState({
     title: '',
     category: '',
@@ -71,7 +70,6 @@ const UploadProduct = () => {
     }));
   };
 
-
   const handleChange =useCallback((e) => {
       const { name, value } = e.target;
     setProducts((prev) => ({ ...prev, [name]: value }));
@@ -87,6 +85,7 @@ const UploadProduct = () => {
       setLoading(true);
       
       const formdata = new FormData();
+
       formdata.append("title", Product.title);
       formdata.append("category", Product.category);
       formdata.append("subCategory", Product.subCategory);
@@ -95,8 +94,11 @@ const UploadProduct = () => {
       formdata.append("description", Product.description);
       Product.size.forEach((size) => formdata.append("size[]", size));
       formdata.append("weight", Product.weight);
-      formdata.append("image", productImage);
+      productImage.forEach((img) => formdata.append("images", img.file));
+      // formdata.append("image", productImage);
+
       dispatch(AddProduct(formdata));
+
       alert("Product uploaded successfully!");
     } catch (error) {
       console.error("Error uploading product:", error);
@@ -194,21 +196,7 @@ const UploadProduct = () => {
         <section className="w-[96%] mx-auto p-4 bg-white rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-3">Media Files</h2>
 
-          <DragDropUpload
-            image={productImage}
-            setImage={setProductImage}
-            preview={previewImage}
-            setPreview={setPreviewImage}
-            // setImages={(updater) =>
-            //   setProducts((prev) => ({
-            //     ...prev,
-            //     images:
-            //       typeof updater === "function"
-            //         ? updater(prev.images)
-            //         : updater,
-            //   }))
-            // }
-          />
+          <DragDropUpload image={productImage} setImage={setProductImage} />
 
           <button type="submit" disabled={loading} aria-label="upload the product and view"
             className=" w-full h-12 mt-3 px-4 py-1 bg-blue-400 flex items-center justify-center gap-2" >

@@ -11,14 +11,14 @@ import { upload } from "../middlewares/upload/upload.middlewares.js";
 
 const router = express.Router();
 
-router.post("/signup", signup);
+router.post("/signup",upload.single("profilePic"),signup);
 router.post("/login", login);
 router.get("/getAllUsers", getAllUsers);
 router.delete("/removeuser/:id", RemoveUser);
 
 router.get("/Getallproducts", Getallproducts);
-router.post("/Addproduct", upload.single("image"), Addproduct);
-router.patch("/Updateproduct", upload.single("images"), Updateproduct);
+router.post("/Addproduct", upload.fields([{name:"thumbnail", maxCount:1},{name:"images", maxCount:10}]), Addproduct);
+router.patch("/Updateproduct", upload.fields([{name:"thumbnail", maxCount:1},{name:"images", maxCount:10}]), Updateproduct);
 router.delete("/Deleteproduct", Deleteproduct);
 
 router.get("/allorders", getAllOrders);

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import path from "path";
 import slugify from "slugify";
 
 const reviewSchema = new mongoose.Schema(
@@ -31,22 +32,27 @@ const reviewSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const productSchema = mongoose.Schema({
-  title: { type: String, required: true, trim: true, unique: true, maxlength: 150 },
-  category: { type: String, required: true },
-  subCategory: { type: String, required:true },
-  images: { type: String },
-  description: { type: String, trim: true },
-  price: { type: Number, required: true, min: 0 },
-  stock: { type: Number, default: 10, min: 0 },
-  size: [{ type: String }],
-  weight: { type: String },
-  ratings: { average: { type: Number, default: 0, min: 0, max: 5 }, count: { type: Number, default: 0 } },
-  reviews: [reviewSchema],
-  isActive: { type: Boolean, default: true },
-  slug: { type: String, required: true, unique: true }
-},
-  { timestamps: true}
+const productSchema = mongoose.Schema(
+  {
+    title: { type: String, required: true, trim: true, unique: true, maxlength: 150, },
+    category: { type: String, required: true },
+    subCategory: { type: String, required: true },
+    thumbnail: { name: { type: String }, path: { type: String } },
+    images: [{ name: { type: String }, path: { type: String } }],
+    description: { type: String, trim: true },
+    price: { type: Number, required: true, min: 0 },
+    stock: { type: Number, default: 10, min: 0 },
+    size: [{ type: String }],
+    weight: { type: String },
+    ratings: {
+      average: { type: Number, default: 0, min: 0, max: 5 },
+      count: { type: Number, default: 0 },
+    },
+    reviews: [reviewSchema],
+    isActive: { type: Boolean, default: true },
+    slug: { type: String, required: true, unique: true },
+  },
+  { timestamps: true },
 );
 
 // Prevent duplicate reviews per user

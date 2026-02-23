@@ -12,7 +12,8 @@ export const Getallproducts = async (req, res) => {
             title: product.title,
             category: product.category,
             subCategory: product.subCategory,
-            image:[product.images],
+            thumbnail: product.thumbnail,
+            image:product.images,
             price: product.price,
             weight: product.weight,
             stock: product.stock,
@@ -31,14 +32,19 @@ export const Getallproducts = async (req, res) => {
 export const Addproduct = async (req, res) => {
   const { title, category, subCategory, description, 
     price, stock, size, weight } = req.body;
-  
-  // const imagePath = req.file.path;
 
   try {
-    let imagePath;
-    if (req.file) {
-      imagePath = req.file.path;
-    }
+        let thumbnail = {};
+          const file = req.files.images[0];
+          thumbnail = {
+            name: file.originalname,
+            path: file.filename,
+          };
+      
+    const images = req.files.images.map((file) => ({
+      name: file.originalname,
+      path: file.filename,
+    }));
 
     if (!title || !category || price === undefined) {
           return res.status(400).json({
@@ -55,7 +61,8 @@ export const Addproduct = async (req, res) => {
       title,
       category,
       subCategory,
-      images: imagePath,
+      thumbnail,
+      images,
       description,
       price,
       stock,
@@ -72,16 +79,21 @@ export const Addproduct = async (req, res) => {
 
 export const Updateproduct = async (req, res) => {
     const { _id } = req.body;
-    const { Title, Category, Sub_Category, Image, Images, Description, price, Quantity } = req.body;
+    const { Title, Category, Sub_Category, Description, price, Quantity } = req.body;
   
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       return res.status(404).send("Product unavailable...");
     }
   
-    try {
+  try {
+          const Images = req.files.images.map((file) => ({
+            name: file.originalname,
+            path: file.filename,
+          }));
+    
       const updatedProduct = await products.findByIdAndUpdate(
         _id,
-        { $set: {Title:Title, Category:Category, Sub_Category:Sub_Category, Image:Image, Images:Images, Description:Description, price:price, Quantity:Quantity } },
+        { $set: {title:Title, category:Category, subCategory:Sub_Category, image:Images, description:Description, price:price, stock:Quantity } },
         { new: true }
       );
       res.status(200).json(updatedProduct);

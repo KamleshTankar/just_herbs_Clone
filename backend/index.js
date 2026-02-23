@@ -2,15 +2,22 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import mongoose from "mongoose";
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import userRoutes from "./routes/Userroutes.js";
 import adminRoutes from "./routes/Adminroutes.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 const App = express();
 App.use(express.json({ limit: "30mb", extended: true }));
 App.use(express.urlencoded({ limit: "30mb", extended: true }));
 App.use(cors());
+App.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
 
 App.get('/', (req, res) => { res.send("This is a ecommerce clone Api testing") });
 

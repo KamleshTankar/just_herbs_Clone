@@ -7,9 +7,8 @@ const Products = ({ Prod }) => {
 
   const { _id, title, price, stock, category, image=[] } = Prod;
   const porductID = _id?.slice(20);
-  const fullImageUrl = `http://localhost:2729/admin/Getallproducts${image[0]}`; 
+  const fullImageUrl = `http://localhost:2729/uploads/${image[0].path}`; 
 
-  console.log("Product Image URL:", fullImageUrl);
   const handelDelete = (id) => {
     console.log("Delete product:", id);
   };
