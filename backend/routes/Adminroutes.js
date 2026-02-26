@@ -2,7 +2,7 @@ import express from "express";
 
 import { login, signup, getAllUsers, RemoveUser } from "../controlers/Admin/Adminauth.js";
 
-import { Getallproducts, Addproduct, Updateproduct, Deleteproduct } from "../controlers/Admin/Products.js";
+import { Getallproducts, GetSingleproduct, Addproduct, Updateproduct, Deleteproduct } from "../controlers/Admin/Products.js";
 
 import { getAllOrders, viewOrderById, updateOrderStatus, deleteOrder } from "../controlers/Admin/Oderscontroler.js";
 
@@ -17,6 +17,7 @@ router.get("/getAllUsers", getAllUsers);
 router.delete("/removeuser/:id", RemoveUser);
 
 router.get("/Getallproducts", Getallproducts);
+router.get("/GetSingleproduct/:id", GetSingleproduct);
 router.post("/Addproduct", upload.fields([{name:"thumbnail", maxCount:1},{name:"images", maxCount:10}]), Addproduct);
 router.patch("/Updateproduct", upload.fields([{name:"thumbnail", maxCount:1},{name:"images", maxCount:10}]), Updateproduct);
 router.delete("/Deleteproduct", Deleteproduct);

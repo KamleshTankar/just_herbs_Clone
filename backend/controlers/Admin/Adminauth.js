@@ -56,7 +56,7 @@ export const login = async (req, res) => {
 export const getAllUsers = async (req, res) => {
   try {
     const allUsers = await customers.find().populate("addresses")
-      .populate("cartItems.productid").populate("myorders");;
+      .populate("cartItems.product").populate("myorders");;
     const allUserDetails = [];
     allUsers.forEach((user) => {
 

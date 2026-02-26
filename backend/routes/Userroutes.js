@@ -23,9 +23,9 @@ router.patch("/updateprofile/:id", upload.single('Avatar'),updateProfile);
 router.get("/Getallproducts", Getallproducts);
 
 router.post("/addtocart", addproduct);
-router.patch("/increseQuantity", auth, increseQuantity);
-router.patch("/decreseQuantity", auth, decreseQuantity);
-router.delete("/deleteCart", auth, deleteCartproduct);
+router.patch("/increseQuantity/:id", increseQuantity);
+router.patch("/decreseQuantity/:id", decreseQuantity);
+router.delete("/deleteCart/:id",  deleteCartproduct);
 router.post("/AllCarts", getAllCarts);
 
 router.post("/createorder", createOrder);

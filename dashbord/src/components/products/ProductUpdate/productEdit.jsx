@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
 
-import { GetallProduct, UpdateProduct } from "../../../redux-toolkit/Slice/ProductSlice";
+import { GetSingleProduct, UpdateProduct } from "../../../redux-toolkit/Slice/ProductSlice";
 
 import { FaCloudUploadAlt, FaTruckLoading } from "react-icons/fa";
 import Banner from "../../Banner";
@@ -12,7 +12,7 @@ const Editproduct = () => {
   const [pImages, setPImages] = useState([]);
     // const [sizeInput, setSizeInput] = useState("");
     const [loading, setLoading] = useState(false);
-    const [Product, setProducts] = useState({
+    const [Products, setProducts] = useState({
       title: '',
       category: '',
       subCategory: '',
@@ -24,18 +24,20 @@ const Editproduct = () => {
     });
   
     const dispatch = useDispatch();
-    const { product, status } = useSelector((state) => state.Product);
-
-  console.log("Product from Redux Store:", product, status);
     const { _id } = useParams();
-
-    const singleproduct = product.filter((item) => item._id === _id);
-
-  const { description, title, price, stock, category, subCategory } = singleproduct;
+    const { singleProduct } = useSelector((state) => state.Product);
 
     useEffect(() => {
-      dispatch(GetallProduct());
-    }, [dispatch]);
+      if (!singleProduct || singleProduct._id !== _id) {
+        dispatch(GetSingleProduct(_id));
+      }
+    }, [_id, dispatch, singleProduct]);
+  
+    useEffect(() => {
+      if (singleProduct) {
+        setProducts(singleProduct);
+      }
+    }, [singleProduct]);
   
     // const handleSizeKeyDown = (e) => {
     //   if (e.key === "Enter" && sizeInput.trim()) {
@@ -69,16 +71,17 @@ const Editproduct = () => {
 
       try {
         setLoading(true);
-        const formdata = new FormData();
-        formdata.append("title", Product.title);
-        formdata.append("category", Product.category);
-        formdata.append("subCategory", Product.subCategory);
-        formdata.append("price", Product.price);
-        formdata.append("stock", Product.stock);
-        formdata.append("description", Product.description);
-        formdata.append("size", Product.size);
+        const data = new FormData();
 
-        dispatch(UpdateProduct({ formdata, id: _id }));
+        Object.keys(Products).forEach((key) => {
+          data.append(key, Products[key]);
+        })
+
+        pImages.forEach((image) => {
+          data.append("images", image);
+        });
+
+        dispatch(UpdateProduct({ formdata:data, id: _id }));
         alert("Product updated successfully!");
       } catch (error) {
         console.error("Error updating product:", error);
@@ -98,7 +101,21 @@ const Editproduct = () => {
       //   }, 500);
       //   }
 
-    },[Product, _id,  dispatch]);
+    }, [Products, pImages, _id, dispatch]);
+  
+  const InputField = React.memo(({ label, ...props }) => (
+    <div className="flex flex-col">
+      <label className="font-medium">{label}</label>
+      <input {...props} className="h-12 p-3 bg-gray-100 border rounded-md" />
+    </div>
+  ));
+
+  const TextAreaField = React.memo(({ label, ...props }) => (
+    <div className="flex flex-col">
+      <label className="font-medium">{label}</label>
+      <textarea {...props} className="h-28 p-3 bg-gray-100 border rounded-md" />
+    </div>
+  ));
 
 return (
 <>
@@ -106,8 +123,16 @@ return (
     <form onSubmit={UpdateSingleProduct} className="py-4">
     <section className="w-[80%] h-auto mx-auto mt-2 p-2 bg-white rounded-md">
         <h2 className="text-2xl font-medium">Edit Product Deteils</h2>
+
+            <InputField label="Product Name" name="title" value={Products.title} onChange={handleChange} />
+            <InputField label="Category" name="category" value={Products.category} onChange={handleChange} />
+            <InputField label="SubCategory" name="subCategory" value={Products.subCategory} onChange={handleChange} />
+            <TextAreaField label="Description" name="description" value={Products.description} onChange={handleChange} />
+            <InputField label="Stock" name="stock" type="number" value={Products.stock} onChange={handleChange} />
+            <InputField label="Price" name="price" type="number" value={Products.price} onChange={handleChange} />
+
                 
-        <div className="flex flex-col my-2">
+        {/* <div className="flex flex-col my-2">
         <label htmlFor="ProductName" className="text-lg font-medium"> Product Name </label>
           <input type="text" value={product.title} defaultValue={title} name="productname" id="ProductName" onChange={handleChange} className="h-14 p-4 bg-gray-200 border border-gray-400 rounded-md focus:outline-none" />
         </div>
@@ -135,7 +160,7 @@ return (
         <div className="flex flex-col my-2">
         <label htmlFor="Price">Price</label>
         <input type="number" value={product.price} defaultValue={price} name="price" id="Price" onChange={handleChange} className="bg-gray-100 p-4 mt-2 border-2 border-gray-300 focus:outline-none rounded-md" />
-        </div>
+        </div> */}
 
         {/* <div className="flex flex-col my-2">
             <label htmlFor="">Ratings</label>
