@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import { TbLetterX, TbArrowNarrowRight } from "react-icons/tb";
 
@@ -14,10 +15,12 @@ const Cart = ({ isClose, isOpen }) => {
 
   const cartRef = useRef(null);
   const dispatch = useDispatch();
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   const { cartItems } = useSelector((state) => state.Cart);
   const { user } = useSelector((state) => state.User);
+  
+  const items = user ? cartItems : guestCart;
 
   useEffect(() => {
     if (user?._id) {
@@ -26,9 +29,8 @@ const Cart = ({ isClose, isOpen }) => {
   }, [user?._id, dispatch]);
 
     const subtotal = useMemo(() => {
-      const items = user ? cartItems : guestCart;
       return items.reduce((acc, i) => acc + i.price * i.quantity, 0);
-    }, [user, cartItems, guestCart]);
+    }, [items]);
   
   const syncLocalStorage = (updated) => {
         setGuestCart(updated);
@@ -43,7 +45,6 @@ const Cart = ({ isClose, isOpen }) => {
   const increaseQuantity = useCallback((id) => {
         if (user) {          
           dispatch(IncreaseQuantity(id));
-          console.log(id);
         } else {
             const updated = guestCart.map((item) =>
               item.id === id ? { ...item, quantity: item.quantity + 1 } : item);
@@ -55,7 +56,6 @@ const Cart = ({ isClose, isOpen }) => {
   const decreaseQuantity = useCallback((id) => {
         if (user) {          
           dispatch(DecreaseQuantity(id));
-          console.log(id);
         } else {
           const updated = guestCart.map((item) =>
             item.id === id ? { ...item, quantity: item.quantity - 1 } : item
@@ -69,24 +69,20 @@ const Cart = ({ isClose, isOpen }) => {
   const removeFromCart = useCallback((id) => {
         if (user) {
           dispatch(DeleteCart(id));
-          console.log(id);
+          toast.success("Item removed from cart");
         } else {
           const updated = guestCart.filter((item) => item.id !== id);
           syncLocalStorage(updated);
+          toast.success("Item removed from cart");
         }
   }, [user, guestCart, dispatch]);
   
   const CheckOut=()=>{
-    if(user){
-      navigator('/checkout ');
+      navigate(user ? '/checkout ' : '/login');
       isClose();
-    }else{
-      navigator('/login');
-      isClose();
-    }
   }
   
-    useEffect(() => {
+  useEffect(() => {
       const handleClickOutside = (e) => {
         if (isOpen && cartRef.current && !cartRef.current.contains(e.target)) {
           isClose();
@@ -94,9 +90,10 @@ const Cart = ({ isClose, isOpen }) => {
       };
 
       document.addEventListener("mousedown", handleClickOutside);
-      return () =>
-        document.removeEventListener("mousedown", handleClickOutside);
-    }, [isOpen, isClose]);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, isClose]);
 
   return (
     <aside ref={cartRef}
@@ -115,10 +112,8 @@ const Cart = ({ isClose, isOpen }) => {
       <div className=" h-[70vh] overflow-y-auto px-4 py-3">
         {user
           ? cartItems.map((item) => (
-            <div
-            key={item.id}
-            className="flex items-start gap-3 mb-4 border border-gray-300 p-2 rounded-md relative bg-gray-50 animate-fade-in"
-            >
+            <div key={item.id}
+            className="flex items-start gap-3 mb-4 border border-gray-300 p-2 rounded-md relative bg-gray-50 animate-fade-in" >
                 {/* Product Image */}
                 <div className="w-[25vw] lap:w-[10vw] h-[13vh] lap:h-[18vh]">
                   <img
@@ -137,7 +132,7 @@ const Cart = ({ isClose, isOpen }) => {
                   <div className="flex items-center mt-2 gap-4">
                     {/* Quantity */}
                     <div className="flex border border-black text-sm rounded">
-                      <button
+                      <button disabled={item.quantity === 1}
                         className="w-8 h-8 bg-gray-200 border-r border-black"
                         onClick={() => decreaseQuantity(item.id, item.quantity)}
                       >
@@ -167,18 +162,16 @@ const Cart = ({ isClose, isOpen }) => {
 
                 {/* Remove Button */}
                 <button
-                  className="absolute right-2 top-2 text-xl text-gray-600 hover:text-red-500"
+                  className="absolute right-3 top-3 text-gray-400 hover:text-red-500 transition"
                   onClick={() => removeFromCart(item.id)}
                 >
-                  <TbLetterX />
+                  <TbLetterX size={18}/>
                 </button>
               </div>
             ))
           : guestCart.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-start gap-3 mb-4 border border-gray-300 p-2 rounded-md relative bg-gray-50 animate-fade-in"
-              >
+              <div key={item.id}
+                className="flex items-start gap-3 mb-4 border border-gray-300 p-2 rounded-md relative bg-gray-50 animate-fade-in" >
                 {/* Product Image */}
                 <div className="w-[25vw] lap:w-[10vw] h-[13vh] lap:h-[18vh]">
                   <img
@@ -190,16 +183,14 @@ const Cart = ({ isClose, isOpen }) => {
 
                 {/* Product Details */}
                 <div className="flex-1 pl-4">
-                  <h2 className="text-base font-semibold truncate">
-                    {item.name}
-                  </h2>
+                  <h2 className="text-sm font-semibold truncate"> {item.name} </h2>
 
                   <div className="flex items-center mt-2 gap-4">
                     {/* Quantity */}
                   <div className={`flex border border-black text-sm rounded transition
                       ${animateId === item.id ? "animate-quantity-bounce":""}`}>
-                      <button
-                        className="w-8 h-8 bg-gray-200 border-r border-black"
+                      <button disabled={item.quantity === 1}
+                        className="w-8 h-8 bg-gray-200 border-r border-black disabled:opacity-40"
                         onClick={() => decreaseQuantity(item.id, item.quantity)}
                       >
                         -

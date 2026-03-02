@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from "react-loading-skeleton";
+import { Toaster } from "react-hot-toast";
 
 import { BrowserRouter as Router } from "react-router";
 
@@ -25,6 +26,7 @@ function App() {
           <AllRoutes />
           <Footer />
         </div>
+        <Toaster position="top-right" />
       </Router>
     </SkeletonTheme>
   );

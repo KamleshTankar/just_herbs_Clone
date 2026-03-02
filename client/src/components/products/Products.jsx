@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router";
+import toast from "react-hot-toast";
 
 import { AddToCart } from "../../Redux-Toolkit/Slices/CartSlice";
 
@@ -31,11 +32,11 @@ const Products = ({ Prod }) => {
         existingCart[index].quantity += 1;
         const updatedQty=[...existingCart]
         localStorage.setItem("Cartitem", JSON.stringify(updatedQty));
-        alert("cart already avaliable quantity updated");
+        toast.success("cart already avaliable quantity updated");
       } else {        
         const updatedCart = [...existingCart, newItem];
         localStorage.setItem("Cartitem", JSON.stringify(updatedCart));
-        alert("Guest cart updated:", updatedCart);
+        toast.success("Guest cart updated:", updatedCart);
       }
     } 
   }, [Prod, user, dispatch]);
